@@ -2,9 +2,9 @@
   "name": "@better-builds/ts-duality",
   "description": "A no BS, easy-to-use utility for compiling TypeScript code to both ESM and CJS targets, as well as properly wiring up package.json exports.",
   "module": "index.ts",
-  "type": "module",
   "private": true,
   "packageManager": "pnpm@10.19.0",
+  "type": "module",
   "engines": {
     "bun": ">=1.3.0",
     "node": ">=22.16.0"
@@ -36,5 +36,128 @@
     "package-manager-detector": "^1.5.0",
     "typescript": "^5",
     "yargs": "^18.0.0"
+  },
+  "exports": {
+    "./compile-code": {
+      "require": {
+        "default": "./dist/cjs/compile-code.js",
+        "types": "./dist/cjs/compile-code.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/compile-code.js",
+        "types": "./dist/esm/compile-code.d.ts"
+      }
+    },
+    "./constants": {
+      "require": {
+        "default": "./dist/cjs/constants.js",
+        "types": "./dist/cjs/constants.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/constants.js",
+        "types": "./dist/esm/constants.d.ts"
+      }
+    },
+    "./exec-async": {
+      "require": {
+        "default": "./dist/cjs/exec-async.js",
+        "types": "./dist/cjs/exec-async.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/exec-async.js",
+        "types": "./dist/esm/exec-async.d.ts"
+      }
+    },
+    "./find-tsconfig-file": {
+      "require": {
+        "default": "./dist/cjs/find-tsconfig-file.js",
+        "types": "./dist/cjs/find-tsconfig-file.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/find-tsconfig-file.js",
+        "types": "./dist/esm/find-tsconfig-file.d.ts"
+      }
+    },
+    "./generate-tsconfigs": {
+      "require": {
+        "default": "./dist/cjs/generate-tsconfigs.js",
+        "types": "./dist/cjs/generate-tsconfigs.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/generate-tsconfigs.js",
+        "types": "./dist/esm/generate-tsconfigs.d.ts"
+      }
+    },
+    "./inject-extra-exports": {
+      "require": {
+        "default": "./dist/cjs/inject-extra-exports.js",
+        "types": "./dist/cjs/inject-extra-exports.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/inject-extra-exports.js",
+        "types": "./dist/esm/inject-extra-exports.d.ts"
+      }
+    },
+    "./logger": {
+      "require": {
+        "default": "./dist/cjs/logger.js",
+        "types": "./dist/cjs/logger.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/logger.js",
+        "types": "./dist/esm/logger.d.ts"
+      }
+    },
+    "./resolve-import-path": {
+      "require": {
+        "default": "./dist/cjs/resolve-import-path.js",
+        "types": "./dist/cjs/resolve-import-path.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/resolve-import-path.js",
+        "types": "./dist/esm/resolve-import-path.d.ts"
+      }
+    },
+    "./run-with-pm": {
+      "require": {
+        "default": "./dist/cjs/run-with-pm.js",
+        "types": "./dist/cjs/run-with-pm.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/run-with-pm.js",
+        "types": "./dist/esm/run-with-pm.d.ts"
+      }
+    },
+    "./ts-duality-lib": {
+      "require": {
+        "default": "./dist/cjs/ts-duality-lib.js",
+        "types": "./dist/cjs/ts-duality-lib.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/ts-duality-lib.js",
+        "types": "./dist/esm/ts-duality-lib.d.ts"
+      }
+    },
+    "./ts-duality": {
+      "require": {
+        "default": "./dist/cjs/ts-duality.js",
+        "types": "./dist/cjs/ts-duality.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/ts-duality.js",
+        "types": "./dist/esm/ts-duality.d.ts"
+      }
+    },
+    "./types": {
+      "require": {
+        "default": "./dist/cjs/types.js",
+        "types": "./dist/cjs/types.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/types.js",
+        "types": "./dist/esm/types.d.ts"
+      }
+    },
+    "./package.json": "./package.json"
   }
 }

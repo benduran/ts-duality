@@ -72,6 +72,7 @@ export async function compileCode(opts: CompileTsOpts) {
   );
 
   const typescriptCompilationPromise = generateTypings(opts);
+  debugger;
   const swcCompilationPromises = filesToCompile.map(async (fp) => {
     const absFp = path.isAbsolute(fp) ? fp : path.join(cwd, fp);
     const trueRelPath = path.relative(cwd, absFp);
