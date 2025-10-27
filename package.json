@@ -1,7 +1,6 @@
 {
   "name": "@better-builds/ts-duality",
   "description": "A no BS, easy-to-use utility for compiling TypeScript code to both ESM and CJS targets, as well as properly wiring up package.json exports.",
-  "module": "index.ts",
   "private": true,
   "packageManager": "pnpm@10.19.0",
   "type": "module",
@@ -88,6 +87,16 @@
         "types": "./dist/esm/generate-tsconfigs.d.ts"
       }
     },
+    ".": {
+      "require": {
+        "default": "./dist/cjs/index.js",
+        "types": "./dist/cjs/index.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/index.js",
+        "types": "./dist/esm/index.d.ts"
+      }
+    },
     "./inject-extra-exports": {
       "require": {
         "default": "./dist/cjs/inject-extra-exports.js",
@@ -159,5 +168,8 @@
       }
     },
     "./package.json": "./package.json"
-  }
+  },
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "main": "./dist/cjs/index.js"
 }
