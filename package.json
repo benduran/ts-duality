@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.19.0",
   "version": "0.0.0",
   "type": "module",
-  "bin": "dist/esm/ts-duality.js",
+  "bin": "./dist/esm/ts-duality.js",
   "engines": {
     "bun": ">=1.3.0",
     "node": ">=22.16.0"
@@ -22,7 +22,7 @@
     "typecheck": "tsc"
   },
   "devDependencies": {
-    "@better-builds/lets-version": "^1.3.2",
+    "@better-builds/lets-version": "^1.4.0",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@cprussin/eslint-config": "^5.0.0",
