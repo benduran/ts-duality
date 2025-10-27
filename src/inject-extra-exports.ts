@@ -1,5 +1,3 @@
-import { Logger } from "./logger.js";
-
 type Config = Partial<{
   extraExports: Record<string, unknown>;
 }>;
@@ -17,8 +15,6 @@ export function injectExtraExports(pjson: PackageJsonWithPossibleConfig) {
   const config = pjson["build-ts-package"];
 
   if (!config?.extraExports) return pjson;
-
-  Logger.info("config.extraExports", JSON.stringify(config.extraExports));
 
   return {
     ...pjson,

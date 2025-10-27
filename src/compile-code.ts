@@ -9,6 +9,7 @@ import { Logger } from "./logger.js";
 import { createResolver } from "./resolve-import-path.js";
 import type { CompileTsOpts } from "./types.js";
 import { runWithPm } from "./run-with-pm.js";
+import { getIndentationSize } from "./get-indentation.js";
 
 /**
  * Generates typescript typings, if requested
@@ -32,9 +33,9 @@ async function generateTypings({
     Logger.warn(
       `your tsconfig at ${tsconfig} was found to have incremental: true set. we are setting this to false to allow typings to be written to disk properly`,
     );
-    const tsconfigContents = JSON.parse(
-      await fs.readFile(tsconfig, "utf8"),
-    ) as TsConfigJson;
+    const fileContents = await fs.readFile(tsconfig, "utf8");
+    const indentSize = getIndentationSize(fileContents);
+    const tsconfigContents = JSON.parse(fileContents) as TsConfigJson;
     await fs.writeFile(
       tsconfig,
       JSON.stringify(
@@ -46,7 +47,7 @@ async function generateTypings({
           },
         },
         undefined,
-        2,
+        indentSize,
       ),
       "utf8",
     );

@@ -21,6 +21,7 @@ import type {
   SafePackageJsonExportObject,
 } from "./types.js";
 import { runWithPm } from "./run-with-pm.js";
+import { getIndentationSize } from "./get-indentation.js";
 
 export async function buildTsPackage(argv = process.argv) {
   const yargs = createCLI(hideBin(argv));
@@ -129,10 +130,24 @@ export async function buildTsPackage(argv = process.argv) {
 
   const numFormats = formats.length;
 
-  const pjson = JSON.parse(await fs.readFile(pjsonPath, "utf8")) as PackageJson;
+  const pjsonContents = await fs.readFile(pjsonPath, "utf8");
+  const pjson = JSON.parse(pjsonContents) as PackageJson;
   if (!pjson.name) {
     throw new Error('your package.json is missing its "name" field');
   }
+  const pjsonIndentSize = getIndentationSize(pjsonContents);
+
+  // we make the package.json a module if the user has an ESM build target.
+  // otherwise, we leave it alone
+  if (numFormats > 1 || formats.includes("esm")) {
+    pjson.type = "module";
+    await fs.writeFile(
+      pjsonPath,
+      JSON.stringify(pjson, undefined, pjsonIndentSize),
+      "utf8",
+    );
+  }
+
   // always freshly reset the exports and let the tool take over
   pjson.exports = {};
 
@@ -261,5 +276,9 @@ export async function buildTsPackage(argv = process.argv) {
   pjson.exports["./package.json"] = "./package.json";
   const injected = injectExtraExports(pjson as PackageJsonWithPossibleConfig);
 
-  await fs.writeFile(pjsonPath, JSON.stringify(injected, undefined, 2), "utf8");
+  await fs.writeFile(
+    pjsonPath,
+    JSON.stringify(injected, undefined, pjsonIndentSize),
+    "utf8",
+  );
 }
