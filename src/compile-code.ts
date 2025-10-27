@@ -5,10 +5,10 @@ import glob from "fast-glob";
 import fs from "fs-extra";
 import type { TsConfigJson } from "type-fest";
 
-import { execAsync } from "./exec-async.js";
 import { Logger } from "./logger.js";
 import { createResolver } from "./resolve-import-path.js";
 import type { CompileTsOpts } from "./types.js";
+import { runWithPm } from "./run-with-pm.js";
 
 /**
  * Generates typescript typings, if requested
@@ -52,9 +52,9 @@ async function generateTypings({
     );
   }
 
-  const cmd = `pnpm tsc --project ${tsconfig} --outDir ${outDir} --declaration true --emitDeclarationOnly true --noEmit false`;
+  const cmd = `tsc --project ${tsconfig} --outDir ${outDir} --declaration true --emitDeclarationOnly true --noEmit false`;
 
-  await execAsync(cmd, { cwd, stdio: "inherit", verbose: true });
+  await runWithPm(cmd, { cwd, stdio: "inherit", verbose: true });
   return;
 }
 

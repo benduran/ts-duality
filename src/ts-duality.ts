@@ -8,7 +8,7 @@ import { hideBin } from "yargs/helpers";
 
 import { compileCode } from "./compile-code.js";
 import { ALLOWED_JSX_RUNTIMES } from "./constants.js";
-import { execAsync } from "./exec-async.js";
+
 import { findTsconfigFile } from "./find-tsconfig-file.js";
 import { generateTsconfigs } from "./generate-tsconfigs.js";
 import type { PackageJsonWithPossibleConfig } from "./inject-extra-exports.js";
@@ -20,6 +20,7 @@ import type {
   ModuleType,
   SafePackageJsonExportObject,
 } from "./types.js";
+import { runWithPm } from "./run-with-pm.js";
 
 export async function buildTsPackage(argv = process.argv) {
   const yargs = createCLI(hideBin(argv));
@@ -147,9 +148,9 @@ export async function buildTsPackage(argv = process.argv) {
       const outDir =
         numFormats <= 1 ? outDirPath : path.join(outDirPath, format);
 
-      const getConfigCmd = `pnpm tsc --project ${tsconfig} --showConfig`;
+      const getConfigCmd = `tsc --project ${tsconfig} --showConfig`;
       const finalConfig = JSON.parse(
-        await execAsync(getConfigCmd, { cwd, stdio: "pipe" }),
+        await runWithPm(getConfigCmd, { cwd, stdio: "pipe" }),
       ) as TsConfigJson;
 
       const tscFoundFiles = Array.isArray(finalConfig.files)
