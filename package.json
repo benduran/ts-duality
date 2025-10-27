@@ -3,6 +3,7 @@
   "description": "A no BS, easy-to-use utility for compiling TypeScript code to both ESM and CJS targets, as well as properly wiring up package.json exports.",
   "private": true,
   "packageManager": "pnpm@10.19.0",
+  "version": "0.0.0",
   "type": "module",
   "bin": "dist/esm/ts-duality.js",
   "engines": {
@@ -16,14 +17,19 @@
     "build": "pnpm clean && pnpm start",
     "clean": "rm -rf dist/",
     "fix:format": "prettier . --write",
+    "prepare": "husky",
     "start": "tsx src/ts-duality.ts",
     "typecheck": "tsc"
   },
   "devDependencies": {
+    "@better-builds/lets-version": "^1.3.2",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@cprussin/eslint-config": "^5.0.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": ">=22",
     "@types/yargs": "^17.0.34",
+    "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "tsx": "^4.20.6",
     "type-fest": "^5.1.0"
