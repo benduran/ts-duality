@@ -76,6 +76,7 @@ or you are mixing roots from across your package, your typings might end up in a
         "if set, will automatically watch for any changes to this library and rebuild, making it easier for you to consume changes in the monorepo while doing local development",
       type: "boolean",
     })
+    .strict()
     .help().argv;
 
   buildTsPackage(rest as TSDualityLibOpts);
