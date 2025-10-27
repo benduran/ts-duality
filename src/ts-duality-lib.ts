@@ -3,11 +3,8 @@ import path from "node:path";
 import chalk from "chalk";
 import fs from "fs-extra";
 import type { PackageJson, TsConfigJson } from "type-fest";
-import createCLI from "yargs";
-import { hideBin } from "yargs/helpers";
 
 import { compileCode } from "./compile-code.js";
-import { ALLOWED_JSX_RUNTIMES } from "./constants.js";
 
 import { findTsconfigFile } from "./find-tsconfig-file.js";
 import { generateTsconfigs } from "./generate-tsconfigs.js";
@@ -19,89 +16,24 @@ import type {
   JSXRuntime,
   ModuleType,
   SafePackageJsonExportObject,
+  TSDualityLibOpts,
 } from "./types.js";
 import { runWithPm } from "./run-with-pm.js";
 import { getIndentationSize } from "./get-indentation.js";
 
-export async function buildTsPackage(argv = process.argv) {
-  const yargs = createCLI(hideBin(argv));
-  const {
-    clean,
-    cwd: absOrRelativeCwd,
-    generateTsconfig,
-    jsx,
-    noCjs,
-    noDts,
-    noEsm,
-    noStripLeading,
-    outDir,
-    tsconfig: tsconfigOverride,
-    watch,
-  } = await yargs
-    .scriptName("build-ts-package")
-    .option("clean", {
-      default: false,
-      description:
-        "if set, will clean out the build dirs before compiling anything",
-      type: "boolean",
-    })
-    .option("cwd", {
-      default: process.cwd(),
-      description: "the CWD to use when building",
-      type: "string",
-    })
-    .option("generateTsconfig", {
-      default: false,
-      description:
-        "if set, will NOT build, but instead, will generate reasonable default TSConfig files that will work with dual publishing, and in most other use cases, as well",
-      type: "boolean",
-    })
-    .option("jsx", {
-      choices: ALLOWED_JSX_RUNTIMES,
-      default: "automatic",
-      description: "the type of JSX runtime to use when compiling your code",
-      type: "string",
-    })
-    .option("noCjs", {
-      default: false,
-      description:
-        "if true, will not build the CommonJS variant of this package",
-      type: "boolean",
-    })
-    .option("noDts", {
-      default: false,
-      description: "if set, will not write typescript typings",
-      type: "boolean",
-    })
-    .option("noEsm", {
-      default: false,
-      description: "if true, will not build the ESM variant of this package",
-      type: "boolean",
-    })
-    .option("noStripLeading", {
-      default: false,
-      description:
-        'if set, will not strip the leading, last common portion of your input file paths when writing output file paths. if your code is located in a "src/" folder, you want to leave this unset.',
-      type: "boolean",
-    })
-    .option("outDir", {
-      default: "dist",
-      description: "the folder where the built files will be written",
-      type: "string",
-    })
-    .option("tsconfig", {
-      description:
-        "if provided, will explicitly use this tsconfig.json location instead of searching for a tsconfig.build.json or a plain tsconfig.json",
-      type: "string",
-    })
-    .option("watch", {
-      default: false,
-      description:
-        "if set, will automatically watch for any changes to this library and rebuild, making it easier for you to consume changes in the monorepo while doing local development",
-      type: "boolean",
-    })
-    .help().argv;
-
+export async function buildTsPackage({
+  clean,
+  cwd: absOrRelativeCwd,
+  generateTsconfig,
+  jsx,
+  noCjs,
+  noDts,
+  noEsm,
+  noStripLeading,
+  outDir,
+  tsconfig: tsconfigOverride,
+  watch,
+}: TSDualityLibOpts) {
   const cwd = path.isAbsolute(absOrRelativeCwd)
     ? absOrRelativeCwd
     : path.resolve(absOrRelativeCwd);
