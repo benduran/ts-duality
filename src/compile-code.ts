@@ -16,6 +16,7 @@ import { getIndentationSize } from "./get-indentation.js";
  */
 async function generateTypings({
   cwd,
+  format,
   noDts,
   outDir,
   parsedTsConfig,
@@ -29,31 +30,46 @@ async function generateTypings({
   // if the tsconfig has incremental: true enabled, we have to disable it
   // or TSC might not generate typings for us at all.
   // we do this by overriding it if it is set.
+  const fileContents = await fs.readFile(tsconfig, "utf8");
+  const updatedTsconfig = JSON.parse(fileContents) as TsConfigJson;
+  const indentSize = getIndentationSize(fileContents);
+
   if (parsedTsConfig.compilerOptions?.incremental) {
     Logger.warn(
       `your tsconfig at ${tsconfig} was found to have incremental: true set. we are setting this to false to allow typings to be written to disk properly`,
     );
-    const fileContents = await fs.readFile(tsconfig, "utf8");
-    const indentSize = getIndentationSize(fileContents);
-    const tsconfigContents = JSON.parse(fileContents) as TsConfigJson;
-    await fs.writeFile(
-      tsconfig,
-      JSON.stringify(
-        {
-          ...tsconfigContents,
-          compilerOptions: {
-            ...tsconfigContents.compilerOptions,
-            incremental: false,
-          },
-        },
-        undefined,
-        indentSize,
-      ),
-      "utf8",
-    );
+    updatedTsconfig.compilerOptions = {
+      ...updatedTsconfig.compilerOptions,
+      incremental: false,
+    };
   }
 
-  const cmd = `tsc --project ${tsconfig} --outDir ${outDir} --declaration true --emitDeclarationOnly true --noEmit false`;
+  if (format === "cjs" && parsedTsConfig.compilerOptions?.isolatedModules) {
+    Logger.warn(
+      "you cannot build typings for CommonJS when isolatedModules is set to true. we are setting this to false to allow typings to be written to disk properly",
+    );
+    updatedTsconfig.compilerOptions = {
+      ...updatedTsconfig.compilerOptions,
+      isolatedModules: false,
+    };
+  }
+
+  if (parsedTsConfig.compilerOptions?.noEmit) {
+    Logger.warn(
+      "noEmit was set to true, which would cause typing compilation to not work. we are setting this to false",
+    );
+    updatedTsconfig.compilerOptions = {
+      ...updatedTsconfig.compilerOptions,
+      noEmit: false,
+    };
+  }
+
+  await fs.writeFile(
+    tsconfig,
+    JSON.stringify(updatedTsconfig, undefined, indentSize),
+  );
+
+  const cmd = `tsc --project ${path.relative(cwd, tsconfig)} --outDir ${path.relative(cwd, outDir)} --declaration --emitDeclarationOnly`;
 
   await runWithPm(cmd, { cwd, stdio: "inherit", verbose: true });
   return;
@@ -111,7 +127,8 @@ export async function compileCode(opts: CompileTsOpts) {
     await fs.writeFile(outFilePath, code, "utf8");
   });
 
-  await Promise.all([typescriptCompilationPromise, ...swcCompilationPromises]);
+  await typescriptCompilationPromise;
+  await Promise.all([...swcCompilationPromises]);
 
   const absoluteBuiltFiles = await glob(
     [

@@ -89,6 +89,16 @@
         "types": "./dist/esm/generate-tsconfigs.d.ts"
       }
     },
+    "./get-indentation": {
+      "require": {
+        "default": "./dist/cjs/get-indentation.js",
+        "types": "./dist/cjs/get-indentation.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/get-indentation.js",
+        "types": "./dist/esm/get-indentation.d.ts"
+      }
+    },
     ".": {
       "require": {
         "default": "./dist/cjs/index.js",
