@@ -1,9 +1,16 @@
-import { spawn } from "node:child_process";
+import os from "node:os";
+
+import { execa } from "execa";
 
 import { Logger } from "./logger.js";
 
 export type ExecAsyncOpts = {
   cwd: string;
+  /**
+   * if true, will not log an error automatically to the console
+   * if one is thrown
+   */
+  suppressError?: boolean;
   stdio: "inherit" | "ignore" | "pipe";
   verbose?: boolean; // defaults to false if not provided
 };
@@ -11,49 +18,15 @@ export type ExecAsyncOpts = {
 /**
  * Executes a command asynchronously via spawn.
  */
-export function execAsync(
+export async function execAsync(
   command: string,
-  { verbose = false, ...opts }: ExecAsyncOpts,
+  { suppressError = false, verbose = false, ...opts }: ExecAsyncOpts,
 ): Promise<string> {
   if (verbose) Logger.info("Executing", command, "in", opts.cwd);
 
-  const [cmd, ...args] = command.split(/\s+/);
+  if (!command) throw new Error("unable to spawn because no command was given");
 
-  if (!cmd) throw new Error("unable to spawn because no command was given");
+  const child = await execa({ ...opts, shell: true })`${command}`;
 
-  return new Promise((resolve, reject) => {
-    const child = spawn(cmd, args, opts);
-
-    let errBuffer = Buffer.alloc(0);
-    let stdoutBuffer = Buffer.alloc(0);
-
-    let error: Error | undefined;
-    child.on("error", (err) => {
-      error = err;
-    });
-    child.stderr?.on("data", (data) => {
-      errBuffer = Buffer.concat([errBuffer, data]);
-    });
-
-    child.stdout?.on("data", (data) => {
-      stdoutBuffer = Buffer.concat([stdoutBuffer, data]);
-    });
-
-    child.once("exit", (code) => {
-      if (code) {
-        const errMsg = errBuffer.toString("utf8");
-        Logger.error(errMsg);
-
-        if (error) {
-          reject(error);
-          return;
-        }
-        reject(new Error(errMsg));
-        return;
-      }
-
-      const output = stdoutBuffer.toString("utf8");
-      resolve(output);
-    });
-  });
+  return child.stdout ?? "";
 }

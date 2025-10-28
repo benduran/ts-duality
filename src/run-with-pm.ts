@@ -1,7 +1,19 @@
+/* eslint-disable n/no-process-env */
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
+/* eslint-disable turbo/no-undeclared-env-vars */
+/* eslint-disable @typescript-eslint/no-namespace */
 import { detect } from "package-manager-detector";
 
 import type { ExecAsyncOpts } from "./exec-async.js";
 import { execAsync } from "./exec-async.js";
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      DUALITY_VERBOSE: string;
+    }
+  }
+}
 
 /**
  * given a command, runs it via "pnpm," "npm" etc, depending
@@ -15,5 +27,9 @@ export async function runWithPm(cmd: string, execOpts: ExecAsyncOpts) {
 
   const { name } = pmInfo;
 
-  return execAsync(`${name} ${cmd}`, execOpts);
+  return execAsync(`${name} ${cmd}`, {
+    ...execOpts,
+    verbose:
+      (process.env.DUALITY_VERBOSE === "true" || execOpts.verbose) ?? false,
+  });
 }

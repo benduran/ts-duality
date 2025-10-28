@@ -93,7 +93,11 @@ export async function buildTsPackage({
 
       const getConfigCmd = `tsc --project ${tsconfig} --showConfig`;
       const finalConfig = JSON.parse(
-        await runWithPm(getConfigCmd, { cwd, stdio: "pipe" }),
+        await runWithPm(getConfigCmd, {
+          cwd,
+          stdio: "pipe",
+          suppressError: false,
+        }),
       ) as TsConfigJson;
 
       const tscFoundFiles = Array.isArray(finalConfig.files)

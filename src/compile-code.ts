@@ -71,7 +71,12 @@ async function generateTypings({
 
   const cmd = `tsc --project ${path.relative(cwd, tsconfig)} --outDir ${path.relative(cwd, outDir)} --declaration --emitDeclarationOnly`;
 
-  await runWithPm(cmd, { cwd, stdio: "inherit", verbose: true });
+  await runWithPm(cmd, {
+    cwd,
+    stdio: "inherit",
+    suppressError: false,
+    verbose: true,
+  });
   return;
 }
 
