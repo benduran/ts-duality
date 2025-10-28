@@ -26,10 +26,10 @@
     "@better-builds/lets-version": "^1.4.0",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "@cprussin/eslint-config": "^5.0.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": ">=22",
     "@types/yargs": "^17.0.34",
+    "eslint-config-react-yas": "^6.0.2",
     "husky": "^9.1.7",
     "type-fest": "^5.1.0"
   },

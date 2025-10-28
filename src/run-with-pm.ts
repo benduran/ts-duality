@@ -1,7 +1,7 @@
 import { detect } from "package-manager-detector";
 
-import type {ExecAsyncOpts} from "./exec-async.js";
-import { execAsync  } from "./exec-async.js";
+import type { ExecAsyncOpts } from "./exec-async.js";
+import { execAsync } from "./exec-async.js";
 
 /**
  * given a command, runs it via "pnpm," "npm" etc, depending
