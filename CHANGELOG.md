@@ -1,3 +1,12 @@
+## 0.0.1-beta.1 (2025-10-28)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: lint fixes (06cffe1d1899562fee3178d49f76919a4d720b48)
+- chore: removed private from package.json (092865e9c2a2b0629edcadeab55e27e119a8cd9b)
+
+---
+
 ## 0.0.1-beta.0 (2025-10-27)
 
 ### 🔀 Miscellaneous 🔀
