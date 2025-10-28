@@ -5,12 +5,13 @@ import fs from "fs-extra";
 import type { PackageJson, TsConfigJson } from "type-fest";
 
 import { compileCode } from "./compile-code.js";
-
 import { findTsconfigFile } from "./find-tsconfig-file.js";
 import { generateTsconfigs } from "./generate-tsconfigs.js";
+import { getIndentationSize } from "./get-indentation.js";
 import type { PackageJsonWithPossibleConfig } from "./inject-extra-exports.js";
 import { injectExtraExports } from "./inject-extra-exports.js";
 import { Logger } from "./logger.js";
+import { runWithPm } from "./run-with-pm.js";
 import type {
   ExportsObject,
   JSXRuntime,
@@ -18,8 +19,6 @@ import type {
   SafePackageJsonExportObject,
   TSDualityLibOpts,
 } from "./types.js";
-import { runWithPm } from "./run-with-pm.js";
-import { getIndentationSize } from "./get-indentation.js";
 
 export async function buildTsPackage({
   clean,

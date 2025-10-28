@@ -1,16 +1,18 @@
-#!/usr/bin/env node
 import createCLI from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { buildTsPackage } from "./ts-duality-lib.js";
 import { ALLOWED_JSX_RUNTIMES } from "./constants.js";
+import { Logger } from "./logger.js";
+import { buildTsPackage } from "./ts-duality-lib.js";
 import type { TSDualityLibOpts } from "./types.js";
 
 async function setupCLI() {
   const yargs = createCLI(hideBin(process.argv));
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const {
     $0: __,
     _,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     ...rest
   } = await yargs
     .scriptName("build-ts-package")
@@ -79,6 +81,14 @@ or you are mixing roots from across your package, your typings might end up in a
     .strict()
     .help().argv;
 
-  buildTsPackage(rest as TSDualityLibOpts);
+  await buildTsPackage(rest as TSDualityLibOpts);
 }
-setupCLI();
+
+void setupCLI()
+  .then(() => {
+    Logger.info("ts-duality is done");
+  })
+  // eslint-disable-next-line unicorn/prefer-top-level-await
+  .catch((error: unknown) => {
+    Logger.error(error);
+  });

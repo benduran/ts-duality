@@ -5,11 +5,11 @@ import glob from "fast-glob";
 import fs from "fs-extra";
 import type { TsConfigJson } from "type-fest";
 
+import { getIndentationSize } from "./get-indentation.js";
 import { Logger } from "./logger.js";
 import { createResolver } from "./resolve-import-path.js";
-import type { CompileTsOpts } from "./types.js";
 import { runWithPm } from "./run-with-pm.js";
-import { getIndentationSize } from "./get-indentation.js";
+import type { CompileTsOpts } from "./types.js";
 
 /**
  * Generates typescript typings, if requested
@@ -89,7 +89,6 @@ export async function compileCode(opts: CompileTsOpts) {
   );
 
   const typescriptCompilationPromise = generateTypings(opts);
-  debugger;
   const swcCompilationPromises = filesToCompile.map(async (fp) => {
     const absFp = path.isAbsolute(fp) ? fp : path.join(cwd, fp);
     const trueRelPath = path.relative(cwd, absFp);
@@ -128,7 +127,7 @@ export async function compileCode(opts: CompileTsOpts) {
   });
 
   await typescriptCompilationPromise;
-  await Promise.all([...swcCompilationPromises]);
+  await Promise.all(swcCompilationPromises);
 
   const absoluteBuiltFiles = await glob(
     [

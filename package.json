@@ -1,7 +1,7 @@
 {
   "name": "@better-builds/ts-duality",
   "description": "A no BS, easy-to-use utility for compiling TypeScript code to both ESM and CJS targets, as well as properly wiring up package.json exports.",
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "bun@1.3.1",
   "version": "0.0.1-beta.0",
   "type": "module",
   "bin": "./dist/esm/ts-duality.js",
@@ -13,11 +13,12 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "pnpm clean && pnpm start",
+    "build": "bun run clean && bun run start",
     "clean": "rm -rf dist/",
-    "fix:format": "prettier . --write",
+    "lint": "eslint './src'",
+    "lint:fix": "eslint './src' --fix",
     "prepare": "husky",
-    "start": "tsx src/ts-duality.ts",
+    "start": "bun src/ts-duality.ts",
     "typecheck": "tsc"
   },
   "devDependencies": {
@@ -29,8 +30,6 @@
     "@types/node": ">=22",
     "@types/yargs": "^17.0.34",
     "husky": "^9.1.7",
-    "prettier": "^3.6.2",
-    "tsx": "^4.20.6",
     "type-fest": "^5.1.0"
   },
   "dependencies": {
