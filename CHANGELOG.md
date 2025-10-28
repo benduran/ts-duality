@@ -1,3 +1,11 @@
+## 0.0.1-beta.2 (2025-10-28)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed binfile shenanigans (cd21f2c42e7cf794ee54e862d466630164e58fea)
+
+---
+
 ## 0.0.1-beta.1 (2025-10-28)
 
 ### 🔀 Miscellaneous 🔀
