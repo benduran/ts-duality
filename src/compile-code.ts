@@ -74,7 +74,6 @@ async function generateTypings({
   await runWithPm(cmd, {
     cwd,
     stdio: "inherit",
-    suppressError: false,
     verbose: true,
   });
   return;

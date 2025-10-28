@@ -82,4 +82,3 @@ or you are mixing roots from across your package, your typings might end up in a
 
   await buildTsPackage(rest as TSDualityLibOpts);
 }
-setupCLI();

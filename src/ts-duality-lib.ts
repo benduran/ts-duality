@@ -96,7 +96,6 @@ export async function buildTsPackage({
         await runWithPm(getConfigCmd, {
           cwd,
           stdio: "pipe",
-          suppressError: false,
         }),
       ) as TsConfigJson;
 
