@@ -1,3 +1,11 @@
+## 0.0.1-beta.5 (2025-10-28)
+
+### 🛠️ Fixes 🛠️
+
+- fix: actually log messages on failure by switching to execa (fa3de20754793403e9af3ed25496e7595af38e22)
+
+---
+
 ## 0.0.1-beta.4 (2025-10-28)
 
 ### 🛠️ Fixes 🛠️
