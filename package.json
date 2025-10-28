@@ -31,7 +31,7 @@
     "@types/yargs": "^17.0.34",
     "eslint-config-react-yas": "^6.0.2",
     "husky": "^9.1.7",
-    "type-fest": "^5.1.0"
+    "typescript": "^5"
   },
   "dependencies": {
     "@swc/core": "^1.13.5",
@@ -40,8 +40,11 @@
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.2",
     "package-manager-detector": "^1.5.0",
-    "typescript": "^5",
+    "type-fest": "^5.1.0",
     "yargs": "^18.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   },
   "exports": {
     "./compile-code": {
