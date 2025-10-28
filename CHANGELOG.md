@@ -1,3 +1,11 @@
+## 0.0.1-beta.4 (2025-10-28)
+
+### 🛠️ Fixes 🛠️
+
+- fix: moved typescript to peerDep and type-fest to prod dep (6eaa4bc80648e872c7df4638938a43648c80a355)
+
+---
+
 ## 0.0.1-beta.3 (2025-10-28)
 
 ### 🔀 Miscellaneous 🔀
