@@ -1,3 +1,11 @@
+## 0.0.1-beta.3 (2025-10-28)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: updated lint config and disable prettier while working in this repo (d331220fc65dec2f46f73fef9fcdbb93d748a77d)
+
+---
+
 ## 0.0.1-beta.2 (2025-10-28)
 
 ### 🛠️ Fixes 🛠️
