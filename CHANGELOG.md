@@ -1,3 +1,11 @@
+## 0.0.1-beta.7 (2025-10-29)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed non-source files accidentally getting rewritten import paths and extensions (dbf0e4d5b64b221de5089835c1e811b27217788c)
+
+---
+
 ## 0.0.1-beta.6 (2025-10-29)
 
 ### ✨ Features ✨
