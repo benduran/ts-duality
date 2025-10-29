@@ -13,17 +13,12 @@ export async function copyNonSourceFiles(
   detectedInputTypescriptFiles: string[],
   outDir: string,
 ) {
-  Logger.info("copying non-source files");
+  const rootDir = getCommonRootPath(
+    detectedInputTypescriptFiles.map((p) => path.join(cwd, p)),
+  );
+  Logger.info("copying all non-source files found in", rootDir);
 
-  const inputDirs = [
-    ...new Set(
-      detectedInputTypescriptFiles.map((relFp) =>
-        path.dirname(path.join(cwd, relFp)),
-      ),
-    ),
-  ];
-
-  const globs = inputDirs.map((absDir) => path.join(absDir, "**", "*"));
+  const globs = [path.join(rootDir, "**", "*")];
 
   const allFiles = await Promise.all(
     globs.map((g) => glob(g, { absolute: true, onlyFiles: true })),
@@ -34,10 +29,6 @@ export async function copyNonSourceFiles(
     .filter(
       (fp) => !fp.includes("node_modules") && !SOURCE_FILES_ONLY.test(fp),
     );
-
-  const rootDir = getCommonRootPath(
-    detectedInputTypescriptFiles.map((p) => path.join(cwd, p)),
-  );
 
   await Promise.all(
     nonSrcFiles.map(
