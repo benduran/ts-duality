@@ -1,3 +1,17 @@
+## 0.0.1-beta.6 (2025-10-29)
+
+### ✨ Features ✨
+
+- feat: added support for copying non source files to the output dir (8638979f90935fb06d39e0227ab0ceb2b7bd9f3c)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- chore: removed unused values (e1db62126270ba5153975434168fc52220294fc9)
+
+---
+
 ## 0.0.1-beta.5 (2025-10-28)
 
 ### 🛠️ Fixes 🛠️
