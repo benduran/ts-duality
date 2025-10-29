@@ -173,7 +173,7 @@ export async function compileCode(opts: CompileTsOpts) {
           newPath = `./${newPath}`;
         }
 
-        if (/\.jsx?/.test(resolved)) {
+        if (/\.jsx?$/.test(resolved)) {
           // Replace only inside the matched statement to avoid accidental global replacements.
           const out = full.replace(importPath, newPath);
 
