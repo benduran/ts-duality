@@ -1,3 +1,11 @@
+## 0.0.1-beta.8 (2025-10-29)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed extra exports using wrong library key (91a7bb77bbd72bdc6dc1013e933c26b776e20d04)
+
+---
+
 ## 0.0.1-beta.7 (2025-10-29)
 
 ### 🛠️ Fixes 🛠️
