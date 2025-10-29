@@ -38,6 +38,12 @@ export type TSDualityLibOpts = {
    */
   clean: boolean;
   /**
+   * if true, will copy any non source files (anything that doesn't end with .js, .jsx, .cjs, .mts, .ts or .tsx)
+   * to the output folder, while maintining the location of the files
+   * to match where they were in your source folder
+   */
+  copyOtherFiles: boolean;
+  /**
    * the CWD to use when building
    */
   cwd: string;

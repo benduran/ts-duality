@@ -21,6 +21,13 @@ export async function setupCLI() {
         "if set, will clean out the build dirs before compiling anything",
       type: "boolean",
     })
+    .option("copyOtherFiles", {
+      default: false,
+      description: `if true, will copy any non source files (anything that doesn't end with .js, .jsx, .cjs, .mts, .ts or .tsx)
+to the output folder, while maintining the location of the files
+to match where they were in your source folder`,
+      type: "boolean",
+    })
     .option("cwd", {
       default: process.cwd(),
       description: "the CWD to use when building",

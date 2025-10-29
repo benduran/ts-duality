@@ -5,6 +5,7 @@ import fs from "fs-extra";
 import type { PackageJson, TsConfigJson } from "type-fest";
 
 import { compileCode } from "./compile-code.js";
+import { copyNonSourceFiles } from "./copy-non-source-files.js";
 import { findTsconfigFile } from "./find-tsconfig-file.js";
 import { generateTsconfigs } from "./generate-tsconfigs.js";
 import { getIndentationSize } from "./get-indentation.js";
@@ -22,6 +23,7 @@ import type {
 
 export async function buildTsPackage({
   clean,
+  copyOtherFiles,
   cwd: absOrRelativeCwd,
   generateTsconfig,
   jsx,
@@ -115,6 +117,10 @@ export async function buildTsPackage({
         tsconfig,
         watch,
       });
+
+      if (copyOtherFiles) {
+        await copyNonSourceFiles(cwd, tscFoundFiles, outDir);
+      }
 
       const builtFiles = absoluteBuiltFiles
         .map((fp) => {
