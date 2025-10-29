@@ -1,3 +1,11 @@
+## 0.0.1-beta.9 (2025-10-29)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed copy behavior to use the rootDir and not the individual src dirs (2901b8df8d86e586fb035e5819bb4470c3399f70)
+
+---
+
 ## 0.0.1-beta.8 (2025-10-29)
 
 ### 🛠️ Fixes 🛠️
