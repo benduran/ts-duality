@@ -68,6 +68,16 @@
         "types": "./dist/esm/constants.d.ts"
       }
     },
+    "./copy-non-source-files": {
+      "require": {
+        "default": "./dist/cjs/copy-non-source-files.js",
+        "types": "./dist/cjs/copy-non-source-files.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/copy-non-source-files.js",
+        "types": "./dist/esm/copy-non-source-files.d.ts"
+      }
+    },
     "./exec-async": {
       "require": {
         "default": "./dist/cjs/exec-async.js",
@@ -96,6 +106,16 @@
       "import": {
         "default": "./dist/esm/generate-tsconfigs.js",
         "types": "./dist/esm/generate-tsconfigs.d.ts"
+      }
+    },
+    "./get-common-root-path": {
+      "require": {
+        "default": "./dist/cjs/get-common-root-path.js",
+        "types": "./dist/cjs/get-common-root-path.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/get-common-root-path.js",
+        "types": "./dist/esm/get-common-root-path.d.ts"
       }
     },
     "./get-indentation": {
