@@ -5,6 +5,7 @@ import glob from "fast-glob";
 import fs from "fs-extra";
 import type { TsConfigJson } from "type-fest";
 
+import { formatWithPrettierIfPossible } from "./format-with-prettier-if-possible.js";
 import { getIndentationSize } from "./get-indentation.js";
 import { Logger } from "./logger.js";
 import { createResolver } from "./resolve-import-path.js";
@@ -68,6 +69,7 @@ async function generateTypings({
     tsconfig,
     JSON.stringify(updatedTsconfig, undefined, indentSize),
   );
+  await formatWithPrettierIfPossible(cwd, tsconfig);
 
   const cmd = `tsc --project ${path.relative(cwd, tsconfig)} --outDir ${path.relative(cwd, outDir)} --declaration --emitDeclarationOnly`;
 

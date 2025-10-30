@@ -222,6 +222,5 @@ export async function buildTsPackage({
     JSON.stringify(injected, undefined, pjsonIndentSize),
     "utf8",
   );
-
-  await formatWithPrettierIfPossible(cwd);
+  await formatWithPrettierIfPossible(cwd, pjsonPath);
 }
