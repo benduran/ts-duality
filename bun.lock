@@ -25,6 +25,9 @@
         "husky": "^9.1.7",
         "typescript": "^5",
       },
+      "optionalDependencies": {
+        "prettier": "^3",
+      },
       "peerDependencies": {
         "typescript": "^5",
       },
