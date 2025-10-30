@@ -1,3 +1,17 @@
+## 0.0.1-beta.13 (2025-10-30)
+
+### ✨ Features ✨
+
+- feat: render cjs or mjs files to disk (b4f35631ccd0678da6ba3425ddf4210766a579bd)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- Merge pull request #3 from benduran/bduran/format-json-with-prettier-if-possible (69b40997652b86268f1be63e668911eca61abc62)
+
+---
+
 ## 0.0.1-beta.12 (2025-10-30)
 
 ### 🛠️ Fixes 🛠️
