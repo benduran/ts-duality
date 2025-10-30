@@ -4,9 +4,5 @@
     "noEmit": false,
     "isolatedModules": false
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    "build.ts"
-  ]
+  "exclude": ["dist", "node_modules", "build.ts"]
 }

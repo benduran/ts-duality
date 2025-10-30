@@ -102,6 +102,16 @@
         "types": "./dist/esm/find-tsconfig-file.d.ts"
       }
     },
+    "./format-with-prettier-if-possible": {
+      "require": {
+        "default": "./dist/cjs/format-with-prettier-if-possible.js",
+        "types": "./dist/cjs/format-with-prettier-if-possible.d.ts"
+      },
+      "import": {
+        "default": "./dist/esm/format-with-prettier-if-possible.js",
+        "types": "./dist/esm/format-with-prettier-if-possible.d.ts"
+      }
+    },
     "./generate-tsconfigs": {
       "require": {
         "default": "./dist/cjs/generate-tsconfigs.js",
