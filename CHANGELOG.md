@@ -1,3 +1,11 @@
+## 0.0.1-beta.14 (2025-10-30)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed binfile (39b227feb69b7a428d5b29fdb1b8b58cee3c3520)
+
+---
+
 ## 0.0.1-beta.13 (2025-10-30)
 
 ### ✨ Features ✨
