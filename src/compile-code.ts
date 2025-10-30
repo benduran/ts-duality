@@ -98,7 +98,7 @@ export async function compileCode(opts: CompileTsOpts) {
   const outExtensionWithDot = `.${outExtension}`;
 
   const filesToCompile = entryPoints.filter((ep) =>
-    /^(?!.*\.d\.ts$).*\.(?:[jt]sx?|cjs|mts)$/.test(ep),
+    /^(?!.*\.d\.ts$).*\.(?:[jt]sx?|cjs|mjs|mts)$/.test(ep),
   );
 
   const typescriptCompilationPromise = generateTypings(opts);

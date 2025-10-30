@@ -190,7 +190,7 @@ export async function buildTsPackage({
         target.default = fpWithBasename;
 
         // Assign type definitions if applicable
-        if (!noDts && fp.endsWith(".d.ts")) {
+        if (!noDts && /\.d\.(c|m)js$/.test(fp)) {
           target.types = fpWithBasename;
         }
 
