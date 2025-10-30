@@ -85,9 +85,16 @@ async function generateTypings({
  * compiles typescript, using any build utility of your choosing
  */
 export async function compileCode(opts: CompileTsOpts) {
-  const { cwd, entryPoints, format, jsxRuntime, noStripLeading, outDir } = opts;
+  const {
+    cwd,
+    entryPoints,
+    format,
+    jsxRuntime,
+    noStripLeading,
+    outDir,
+    outExtension,
+  } = opts;
 
-  const outExtension = "js";
   const outExtensionWithDot = `.${outExtension}`;
 
   const filesToCompile = entryPoints.filter((ep) =>
@@ -188,5 +195,7 @@ export async function compileCode(opts: CompileTsOpts) {
     }),
   );
 
-  return absoluteBuiltFiles;
+  return absoluteBuiltFiles.map((fp) =>
+    fp.replace(path.extname(fp), outExtensionWithDot),
+  );
 }

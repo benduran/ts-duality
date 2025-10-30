@@ -106,6 +106,8 @@ export async function buildTsPackage({
         ? finalConfig.files
         : [];
 
+      const outExtension = format === "cjs" ? "cjs" : "mjs";
+
       const absoluteBuiltFiles = await compileCode({
         cwd,
         entryPoints: tscFoundFiles,
@@ -114,6 +116,7 @@ export async function buildTsPackage({
         noDts,
         noStripLeading,
         outDir,
+        outExtension,
         parsedTsConfig: finalConfig,
         tsconfig,
         watch,
