@@ -7,7 +7,7 @@
   "bin": "./bin/ts-duality",
   "engines": {
     "bun": ">=1.3.0",
-    "node": ">=22.16.0"
+    "node": ">=22.14.0"
   },
   "files": [
     "bin/*",
