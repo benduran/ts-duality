@@ -1,3 +1,18 @@
+## 0.0.1-beta.11 (2025-10-30)
+
+### ✨ Features ✨
+
+- feat: format with relative paths, just in case (f48ac20bd779c6f0fb1782a138e0e8abe29db591)
+- feat: format with prettier if it's installed (e81ef62c7776a85b2384189cbdecbf504af27c26)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- Merge pull request #2 from benduran/bduran/engines-loosen (adc548e2f15a5e2390ecbc4667c29db77eb1019c)
+
+---
+
 ## 0.0.1-beta.10 (2025-10-30)
 
 ### 🔀 Miscellaneous 🔀
