@@ -1,3 +1,11 @@
+## 0.0.1-beta.15 (2025-10-30)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed typings not being written with the new file extension handling (67c9388c9e1f1d46188a9179193d51f394d01d78)
+
+---
+
 ## 0.0.1-beta.14 (2025-10-30)
 
 ### 🛠️ Fixes 🛠️
