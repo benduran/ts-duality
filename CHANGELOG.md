@@ -1,3 +1,12 @@
+## 0.0.1-beta.10 (2025-10-30)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: loosened the engines range (722e1db7fe7c09c7bd613761a0ae648a5d796ed6)
+- Merge pull request #1 from benduran/bduran/add-lets-version (a81f6908cff52e2cd8e74a9f39a10e00364d8fd6)
+
+---
+
 ## 0.0.1-beta.9 (2025-10-29)
 
 ### 🛠️ Fixes 🛠️
