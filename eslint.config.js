@@ -1,1 +1,1 @@
-export { base as default } from "@cprussin/eslint-config";
+export { respectPrettierConfig as default } from "eslint-config-react-yas";

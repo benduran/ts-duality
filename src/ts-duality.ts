@@ -1,16 +1,17 @@
-#!/usr/bin/env node
 import createCLI from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { buildTsPackage } from "./ts-duality-lib.js";
 import { ALLOWED_JSX_RUNTIMES } from "./constants.js";
+import { buildTsPackage } from "./ts-duality-lib.js";
 import type { TSDualityLibOpts } from "./types.js";
 
-async function setupCLI() {
+export async function setupCLI() {
   const yargs = createCLI(hideBin(process.argv));
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const {
     $0: __,
     _,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     ...rest
   } = await yargs
     .scriptName("build-ts-package")
@@ -18,6 +19,13 @@ async function setupCLI() {
       default: false,
       description:
         "if set, will clean out the build dirs before compiling anything",
+      type: "boolean",
+    })
+    .option("copyOtherFiles", {
+      default: false,
+      description: `if true, will copy any non source files (anything that doesn't end with .js, .jsx, .cjs, .mts, .ts or .tsx)
+to the output folder, while maintining the location of the files
+to match where they were in your source folder`,
       type: "boolean",
     })
     .option("cwd", {
@@ -79,6 +87,5 @@ or you are mixing roots from across your package, your typings might end up in a
     .strict()
     .help().argv;
 
-  buildTsPackage(rest as TSDualityLibOpts);
+  await buildTsPackage(rest as TSDualityLibOpts);
 }
-setupCLI();

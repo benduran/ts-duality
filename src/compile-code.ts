@@ -5,11 +5,11 @@ import glob from "fast-glob";
 import fs from "fs-extra";
 import type { TsConfigJson } from "type-fest";
 
+import { getIndentationSize } from "./get-indentation.js";
 import { Logger } from "./logger.js";
 import { createResolver } from "./resolve-import-path.js";
-import type { CompileTsOpts } from "./types.js";
 import { runWithPm } from "./run-with-pm.js";
-import { getIndentationSize } from "./get-indentation.js";
+import type { CompileTsOpts } from "./types.js";
 
 /**
  * Generates typescript typings, if requested
@@ -71,7 +71,11 @@ async function generateTypings({
 
   const cmd = `tsc --project ${path.relative(cwd, tsconfig)} --outDir ${path.relative(cwd, outDir)} --declaration --emitDeclarationOnly`;
 
-  await runWithPm(cmd, { cwd, stdio: "inherit", verbose: true });
+  await runWithPm(cmd, {
+    cwd,
+    stdio: "inherit",
+    verbose: true,
+  });
   return;
 }
 
@@ -89,7 +93,6 @@ export async function compileCode(opts: CompileTsOpts) {
   );
 
   const typescriptCompilationPromise = generateTypings(opts);
-  debugger;
   const swcCompilationPromises = filesToCompile.map(async (fp) => {
     const absFp = path.isAbsolute(fp) ? fp : path.join(cwd, fp);
     const trueRelPath = path.relative(cwd, absFp);
@@ -128,7 +131,7 @@ export async function compileCode(opts: CompileTsOpts) {
   });
 
   await typescriptCompilationPromise;
-  await Promise.all([...swcCompilationPromises]);
+  await Promise.all(swcCompilationPromises);
 
   const absoluteBuiltFiles = await glob(
     [
@@ -170,7 +173,7 @@ export async function compileCode(opts: CompileTsOpts) {
           newPath = `./${newPath}`;
         }
 
-        if (/\.jsx?/.test(resolved)) {
+        if (/\.jsx?$/.test(resolved)) {
           // Replace only inside the matched statement to avoid accidental global replacements.
           const out = full.replace(importPath, newPath);
 
