@@ -1,6 +1,6 @@
-import fs from "node:fs/promises";
 import path from "node:path";
 
+import { checkFileExists } from "./check-file-exists.js";
 import type { Nullish } from "./types.js";
 
 /**
@@ -25,12 +25,8 @@ export async function findTsconfigFile(
   ];
 
   for (const fp of locations) {
-    try {
-      const stat = await fs.stat(fp);
-      if (stat.isFile()) return fp;
-    } catch {
-      /* no-top */
-    }
+    const isFile = await checkFileExists(cwd, fp);
+    if (isFile) return fp;
   }
   return;
 }

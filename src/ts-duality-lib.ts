@@ -4,6 +4,7 @@ import chalk from "chalk";
 import fs from "fs-extra";
 import type { PackageJson, TsConfigJson } from "type-fest";
 
+import { checkFileExists } from "./check-file-exists.js";
 import { compileCode } from "./compile-code.js";
 import { copyNonSourceFiles } from "./copy-non-source-files.js";
 import { findTsconfigFile } from "./find-tsconfig-file.js";
@@ -146,10 +147,13 @@ export async function buildTsPackage({
         if (format === "cjs" || numFormats <= 1) {
           // we use the legacy type of typing exports for the top-level
           // typings
-          pjson.types = fixedIndexFile.replace(
+          const indexTypingFilePath = fixedIndexFile.replace(
             path.extname(indexFile),
             ".d.ts",
           );
+          if (await checkFileExists(cwd, indexTypingFilePath)) {
+            pjson.types = indexTypingFilePath;
+          }
         }
         if (format === "esm") {
           pjson.module = fixedIndexFile;
@@ -173,6 +177,10 @@ export async function buildTsPackage({
         const fpWithBasename = `./${path
           .join(outDirBasename, fp)
           .replaceAll("\\", "/")}`;
+        const possibleTypingFile = `./${path.join(
+          outDirBasename,
+          fp.replace(path.extname(fp), ".d.ts"),
+        )}`;
 
         // Ensure key object exists
         const tempExports = exports[key] ?? {};
@@ -190,8 +198,14 @@ export async function buildTsPackage({
         target.default = fpWithBasename;
 
         // Assign type definitions if applicable
-        if (!noDts && /\.d\.(c|m)js$/.test(fp)) {
-          target.types = fpWithBasename;
+        if (!noDts) {
+          const typingFileExists = await checkFileExists(
+            cwd,
+            possibleTypingFile,
+          );
+          if (typingFileExists) {
+            target.types = possibleTypingFile;
+          }
         }
 
         exports[key] = tempExports;

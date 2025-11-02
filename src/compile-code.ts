@@ -156,7 +156,7 @@ export async function compileCode(opts: CompileTsOpts) {
   const esmRegex =
     /\bimport\s+(?:[\s\S]*?\bfrom\s+)?(['"])([^'"]+)\1|\bexport\s+(?:[\s\S]*?\bfrom\s+)(['"])([^'"]+)\3/g;
 
-  await Promise.all(
+  const absBuiltFiles = await Promise.all(
     absoluteBuiltFiles.map(async (absFp) => {
       if (absFp.endsWith(".d.ts")) return;
 
@@ -192,10 +192,10 @@ export async function compileCode(opts: CompileTsOpts) {
       });
 
       await fs.writeFile(absFp, contents, "utf8");
+
+      return absFp.replace(path.extname(absFp), outExtensionWithDot);
     }),
   );
 
-  return absoluteBuiltFiles.map((fp) =>
-    fp.replace(path.extname(fp), outExtensionWithDot),
-  );
+  return absBuiltFiles.filter((fp): fp is string => !!fp);
 }
