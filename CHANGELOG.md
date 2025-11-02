@@ -1,3 +1,11 @@
+## 0.0.1-beta.16 (2025-11-02)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed typing file paths to be compatible with the new file extension feature (52761a5c39e754abb83a7dd2d8dc60eabb916927)
+
+---
+
 ## 0.0.1-beta.15 (2025-10-30)
 
 ### 🛠️ Fixes 🛠️
