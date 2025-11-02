@@ -1,3 +1,11 @@
+## 0.0.1-beta.17 (2025-11-02)
+
+### ✨ Features ✨
+
+- feat: added support for dynamic import rewrites (66ef3978af36f198bcb254259ed4370e68583afe)
+
+---
+
 ## 0.0.1-beta.16 (2025-11-02)
 
 ### 🛠️ Fixes 🛠️
