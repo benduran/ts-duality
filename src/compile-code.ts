@@ -81,6 +81,33 @@ async function generateTypings({
   return;
 }
 
+// Helper to rewrite a matched specifier using your resolver and rules
+const rewriteSpecifier = (
+  outDir: string,
+  outExtensionWithDot: string,
+  origSpecifier: string,
+  absFile: string,
+) => {
+  const resolveImport = createResolver(absFile);
+  const { resolved, resolvedRelative } = resolveImport(origSpecifier);
+
+  if (!resolved.startsWith(outDir)) return;
+
+  const ext = path.extname(resolvedRelative);
+  let newPath = ext
+    ? resolvedRelative.replace(ext, outExtensionWithDot)
+    : `${resolvedRelative}${outExtensionWithDot}`;
+
+  if (!newPath.startsWith(".") && !newPath.startsWith("/")) {
+    newPath = `./${newPath}`;
+  }
+
+  if (/\.jsx?$/.test(resolved)) {
+    return newPath;
+  }
+  return;
+};
+
 /**
  * compiles typescript, using any build utility of your choosing
  */
@@ -156,44 +183,44 @@ export async function compileCode(opts: CompileTsOpts) {
   const esmRegex =
     /\bimport\s+(?:[\s\S]*?\bfrom\s+)?(['"])([^'"]+)\1|\bexport\s+(?:[\s\S]*?\bfrom\s+)(['"])([^'"]+)\3/g;
 
+  // Matches dynamic import('...') and captures the module specifier
+  const dynImportRegex = /import\(\s*(['"])([^'"]+)\1\s*\)/g;
+
   const absBuiltFiles = await Promise.all(
     absoluteBuiltFiles.map(async (absFp) => {
       if (absFp.endsWith(".d.ts")) return;
 
       let contents = await fs.readFile(absFp, "utf8");
 
-      contents = contents.replaceAll(esmRegex, (full, _q1, imp1, _q2, imp2) => {
+      // 1) Static imports / exports
+      contents = contents.replaceAll(esmRegex, (full, _, imp1, __, imp2) => {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const importPath = String(imp1 || imp2);
-        const resolveImport = createResolver(absFp);
-        const { resolved, resolvedRelative } = resolveImport(importPath);
+        const newPath = rewriteSpecifier(
+          outDir,
+          outExtensionWithDot,
+          importPath,
+          absFp,
+        );
+        if (!newPath) return full;
+        return full.replace(importPath, newPath);
+      });
 
-        if (!resolved.startsWith(outDir)) return full;
-
-        // Compute the new path:
-        // - If the specifier has an extension, replace it.
-        // - If it doesn't, append the desired extension.
-        const ext = path.extname(resolvedRelative);
-        let newPath = ext
-          ? resolvedRelative.replace(ext, outExtensionWithDot)
-          : `${resolvedRelative}${outExtensionWithDot}`;
-
-        if (!newPath.startsWith(".") && !newPath.startsWith("/")) {
-          newPath = `./${newPath}`;
-        }
-
-        if (/\.jsx?$/.test(resolved)) {
-          // Replace only inside the matched statement to avoid accidental global replacements.
-          const out = full.replace(importPath, newPath);
-
-          return out;
-        }
-        return full;
+      // 2) Dynamic imports
+      contents = contents.replaceAll(dynImportRegex, (full, _, spec) => {
+        const newPath = rewriteSpecifier(
+          outDir,
+          outExtensionWithDot,
+          String(spec),
+          absFp,
+        );
+        if (!newPath) return full;
+        // replace only the specifier inside the import(...) expression
+        return full.replace(String(spec), newPath);
       });
 
       await fs.writeFile(absFp, contents, "utf8");
-
-      return absFp.replace(path.extname(absFp), outExtensionWithDot);
+      return absFp;
     }),
   );
 
