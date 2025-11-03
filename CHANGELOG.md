@@ -1,3 +1,11 @@
+## 0.0.1-beta.22 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: added index file detection for folder imports in the resolver (bb10050bea10ca4dce99f519a9458b4b477919b0)
+
+---
+
 ## 0.0.1-beta.21 (2025-11-03)
 
 ### 🛠️ Fixes 🛠️
