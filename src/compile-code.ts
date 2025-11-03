@@ -165,6 +165,7 @@ export async function compileCode(opts: CompileTsOpts) {
 
     await fs.ensureFile(outFilePath);
     await fs.writeFile(outFilePath, code, "utf8");
+    await formatWithPrettierIfPossible(cwd, outFilePath);
   });
 
   await typescriptCompilationPromise;
