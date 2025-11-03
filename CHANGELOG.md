@@ -1,3 +1,11 @@
+## 0.0.1-beta.25 (2025-11-03)
+
+### ✨ Features ✨
+
+- feat: format rendered files with prettier if it is installed (de2beb34df69c3018cc09c6e03b86211874f74a2)
+
+---
+
 ## 0.0.1-beta.24 (2025-11-03)
 
 ### 🔀 Miscellaneous 🔀
