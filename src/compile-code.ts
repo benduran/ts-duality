@@ -102,7 +102,7 @@ const rewriteSpecifier = (
     newPath = `./${newPath}`;
   }
 
-  if (/\.jsx?$/.test(resolved)) {
+  if (/\.(c|m)?jsx?$/.test(resolved)) {
     return newPath;
   }
   return;
