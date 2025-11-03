@@ -2,8 +2,6 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import { Logger } from "./logger.js";
-
 type ResolveImportCallback = (
   importSpecifier: string,
   expectedFileExtensionWithDot: string,
