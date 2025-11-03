@@ -1,3 +1,11 @@
+## 0.0.1-beta.21 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: trying to fix import resolver (2d19a95febe1a9e4e380eff44e2a8af27f783421)
+
+---
+
 ## 0.0.1-beta.20 (2025-11-03)
 
 ### 🛠️ Fixes 🛠️
