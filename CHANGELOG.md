@@ -1,3 +1,11 @@
+## 0.0.1-beta.19 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed commonjs not having paths replaced (0b783756a9900df445b037883bee5481e77bec7a)
+
+---
+
 ## 0.0.1-beta.18 (2025-11-03)
 
 ### ✨ Features ✨
