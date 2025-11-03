@@ -1,3 +1,11 @@
+## 0.0.1-beta.23 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: try importing the correct path (b7c61fff595c9313031cb55c1ff9fc8c6c538a4e)
+
+---
+
 ## 0.0.1-beta.22 (2025-11-03)
 
 ### 🛠️ Fixes 🛠️
