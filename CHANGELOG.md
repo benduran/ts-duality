@@ -1,3 +1,17 @@
+## 0.0.1-beta.24 (2025-11-03)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: removed unused import (d485fc507a7fa8d191d4f3f82702ff4dec5dcea7)
+
+
+
+### 🛠️ Fixes 🛠️
+
+- fix: use the correct file extensions (8b3144b83972c74f070187873100b1dbba9f4d9f)
+
+---
+
 ## 0.0.1-beta.23 (2025-11-03)
 
 ### 🛠️ Fixes 🛠️
