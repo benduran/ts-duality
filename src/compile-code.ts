@@ -186,6 +186,9 @@ export async function compileCode(opts: CompileTsOpts) {
   // Matches dynamic import('...') and captures the module specifier
   const dynImportRegex = /import\(\s*(['"])([^'"]+)\1\s*\)/g;
 
+  // Matches require('...') and captures the module specifier
+  const requireRegex = /require\(\s*(['"])([^'"]+)\1\s*\)/g;
+
   const absBuiltFiles = await Promise.all(
     absoluteBuiltFiles.map(async (absFp) => {
       if (absFp.endsWith(".d.ts")) return;
@@ -208,15 +211,28 @@ export async function compileCode(opts: CompileTsOpts) {
 
       // 2) Dynamic imports
       contents = contents.replaceAll(dynImportRegex, (full, _, spec) => {
+        const strSpec = String(spec);
         const newPath = rewriteSpecifier(
           outDir,
           outExtensionWithDot,
-          String(spec),
+          strSpec,
           absFp,
         );
         if (!newPath) return full;
-        // replace only the specifier inside the import(...) expression
-        return full.replace(String(spec), newPath);
+        return full.replace(strSpec, newPath);
+      });
+
+      // 3) CommonJS require()
+      contents = contents.replaceAll(requireRegex, (full, _, spec) => {
+        const strSpec = String(spec);
+        const newPath = rewriteSpecifier(
+          outDir,
+          outExtensionWithDot,
+          strSpec,
+          absFp,
+        );
+        if (!newPath) return full;
+        return full.replace(strSpec, newPath);
       });
 
       await fs.writeFile(absFp, contents, "utf8");
