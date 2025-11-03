@@ -33,7 +33,16 @@ export function createResolver(absFilePath: string): ResolveImportCallback {
       hadExtension
         ? undefined
         : `.${path.join(importSpecifier, `index${expectedFileExtensionWithDot}`)}`,
-    ].filter((toCheck): toCheck is string => !!toCheck);
+    ]
+      .filter((toCheck): toCheck is string => !!toCheck)
+      .map((specifier) =>
+        hadExtension
+          ? specifier.replace(
+              path.extname(specifier),
+              expectedFileExtensionWithDot,
+            )
+          : `${specifier}${expectedFileExtensionWithDot}`,
+      );
 
     for (const specifier of pathsToCheckForResolution) {
       // Try Node's resolution first (handles bare specifiers, exports fields, node_modules, etc.)
