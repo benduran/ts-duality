@@ -1,3 +1,11 @@
+## 0.0.1-beta.20 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: made RUN_DIRECT nullable (ea25deb98cc31f6032f577228b91a68e5daa5ed2)
+
+---
+
 ## 0.0.1-beta.19 (2025-11-03)
 
 ### 🛠️ Fixes 🛠️
