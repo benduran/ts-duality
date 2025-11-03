@@ -2,6 +2,8 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { Logger } from "./logger.js";
+
 type ResolveImportCallback = (
   importSpecifier: string,
   expectedFileExtensionWithDot: string,
@@ -13,6 +15,11 @@ type ResolveImportCallback = (
     }
   | null
   | undefined;
+
+function ensureRelativePathStartsWithDotSlash(relpath: string) {
+  if (/^\.(\/|\\)/.test(relpath)) return relpath;
+  return `./${relpath}`;
+}
 
 /**
  * Create a resolver bound to the directory of a given file path.
@@ -27,31 +34,29 @@ export function createResolver(absFilePath: string): ResolveImportCallback {
     const hadExtension = /\.[a-zA-Z0-9]+$/.test(importSpecifier);
 
     const pathsToCheckForResolution = [
-      hadExtension
-        ? importSpecifier
-        : `.${importSpecifier}${expectedFileExtensionWithDot}`,
+      ensureRelativePathStartsWithDotSlash(
+        hadExtension
+          ? importSpecifier
+          : path.join(`${importSpecifier}${expectedFileExtensionWithDot}`),
+      ),
       hadExtension
         ? undefined
-        : `.${path.join(importSpecifier, `index${expectedFileExtensionWithDot}`)}`,
+        : ensureRelativePathStartsWithDotSlash(
+            path.join(importSpecifier, `index${expectedFileExtensionWithDot}`),
+          ),
     ]
       .filter((toCheck): toCheck is string => !!toCheck)
       .map((specifier) =>
-        hadExtension
-          ? specifier.replace(
-              path.extname(specifier),
-              expectedFileExtensionWithDot,
-            )
-          : `${specifier}${expectedFileExtensionWithDot}`,
+        specifier.replace(
+          path.extname(specifier),
+          expectedFileExtensionWithDot,
+        ),
       );
 
     for (const specifier of pathsToCheckForResolution) {
       // Try Node's resolution first (handles bare specifiers, exports fields, node_modules, etc.)
       try {
-        const resolved = require.resolve(
-          hadExtension
-            ? specifier
-            : `${specifier}${expectedFileExtensionWithDot}`,
-        );
+        const resolved = require.resolve(specifier);
 
         const resolvedRelative = path.relative(absDir, resolved);
 
