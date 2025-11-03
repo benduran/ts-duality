@@ -2,7 +2,10 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-type ResolveImportCallback = (specifier: string) => {
+type ResolveImportCallback = (
+  specifier: string,
+  expectedFileExtensionWithDot: string,
+) => {
   hadExtension: boolean;
   resolved: string;
   resolvedRelative: string;
@@ -17,12 +20,16 @@ export function createResolver(absFilePath: string): ResolveImportCallback {
   // Bind Node's resolution to the given file (behaves as if that file did the import)
   const require = createRequire(pathToFileURL(absFilePath));
 
-  return function resolve(specifier) {
+  return function resolve(specifier, expectedFileExtensionWithDot) {
     const hadExtension = /\.[a-zA-Z0-9]+$/.test(specifier);
 
     // Try Node's resolution first (handles bare specifiers, exports fields, node_modules, etc.)
     try {
-      const resolved = require.resolve(specifier);
+      const resolved = require.resolve(
+        hadExtension
+          ? specifier
+          : `${specifier}${expectedFileExtensionWithDot}`,
+      );
 
       const resolvedRelative = path.relative(absDir, resolved);
 

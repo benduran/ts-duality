@@ -89,7 +89,10 @@ const rewriteSpecifier = (
   absFile: string,
 ) => {
   const resolveImport = createResolver(absFile);
-  const { resolved, resolvedRelative } = resolveImport(origSpecifier);
+  const { resolved, resolvedRelative } = resolveImport(
+    origSpecifier,
+    outExtensionWithDot,
+  );
 
   if (!resolved.startsWith(outDir)) return;
 
