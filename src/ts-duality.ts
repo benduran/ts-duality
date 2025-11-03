@@ -96,11 +96,11 @@ or you are mixing roots from across your package, your typings might end up in a
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      RUN_DIRECT: string;
+      RUN_DIRECT?: string;
     }
   }
 }
 
-if (process.env.RUN_DIRECT.toLowerCase() === "true") {
+if (process.env.RUN_DIRECT?.toLowerCase() === "true") {
   await setupCLI();
 }
