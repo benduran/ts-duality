@@ -1,3 +1,11 @@
+## 0.0.1-beta.18 (2025-11-03)
+
+### ✨ Features ✨
+
+- feat: added require import rewrites, as well (18ed6cd726d9bef9ae8411516fb0e9df13ecd2ec)
+
+---
+
 ## 0.0.1-beta.17 (2025-11-02)
 
 ### ✨ Features ✨
