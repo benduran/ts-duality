@@ -194,9 +194,6 @@ export async function buildTsPackage({
           target = tempExports;
         }
 
-        // Assign default JS entry
-        target.default = fpWithBasename;
-
         // Assign type definitions if applicable
         if (!noDts) {
           const typingFileExists = await checkFileExists(
@@ -208,6 +205,8 @@ export async function buildTsPackage({
           }
         }
 
+        // Assign default JS entry
+        target.default = fpWithBasename;
         exports[key] = tempExports;
       }
 
