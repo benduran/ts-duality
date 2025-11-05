@@ -81,17 +81,52 @@ async function generateTypings({
   return;
 }
 
+// Helper to rewrite a matched specifier using your resolver and rules
+const rewriteSpecifier = (
+  outDir: string,
+  outExtensionWithDot: string,
+  origSpecifier: string,
+  absFile: string,
+) => {
+  const resolveImport = createResolver(absFile);
+  const { resolved, resolvedRelative } =
+    resolveImport(origSpecifier, outExtensionWithDot) ?? {};
+
+  if (!resolvedRelative || !resolved?.startsWith(outDir)) return;
+
+  const ext = path.extname(resolvedRelative);
+  let newPath = ext
+    ? resolvedRelative.replace(ext, outExtensionWithDot)
+    : `${resolvedRelative}${outExtensionWithDot}`;
+
+  if (!newPath.startsWith(".") && !newPath.startsWith("/")) {
+    newPath = `./${newPath}`;
+  }
+
+  if (/\.(c|m)?jsx?$/.test(resolved)) {
+    return newPath;
+  }
+  return;
+};
+
 /**
  * compiles typescript, using any build utility of your choosing
  */
 export async function compileCode(opts: CompileTsOpts) {
-  const { cwd, entryPoints, format, jsxRuntime, noStripLeading, outDir } = opts;
+  const {
+    cwd,
+    entryPoints,
+    format,
+    jsxRuntime,
+    noStripLeading,
+    outDir,
+    outExtension,
+  } = opts;
 
-  const outExtension = "js";
   const outExtensionWithDot = `.${outExtension}`;
 
   const filesToCompile = entryPoints.filter((ep) =>
-    /^(?!.*\.d\.ts$).*\.(?:[jt]sx?|cjs|mts)$/.test(ep),
+    /^(?!.*\.d\.ts$).*\.(?:[jt]sx?|cjs|mjs|mts)$/.test(ep),
   );
 
   const typescriptCompilationPromise = generateTypings(opts);
@@ -130,6 +165,7 @@ export async function compileCode(opts: CompileTsOpts) {
 
     await fs.ensureFile(outFilePath);
     await fs.writeFile(outFilePath, code, "utf8");
+    await formatWithPrettierIfPossible(cwd, outFilePath);
   });
 
   await typescriptCompilationPromise;
@@ -149,44 +185,62 @@ export async function compileCode(opts: CompileTsOpts) {
   const esmRegex =
     /\bimport\s+(?:[\s\S]*?\bfrom\s+)?(['"])([^'"]+)\1|\bexport\s+(?:[\s\S]*?\bfrom\s+)(['"])([^'"]+)\3/g;
 
-  await Promise.all(
+  // Matches dynamic import('...') and captures the module specifier
+  const dynImportRegex = /import\(\s*(['"])([^'"]+)\1\s*\)/g;
+
+  // Matches require('...') and captures the module specifier
+  const requireRegex = /require\(\s*(['"])([^'"]+)\1\s*\)/g;
+
+  const absBuiltFiles = await Promise.all(
     absoluteBuiltFiles.map(async (absFp) => {
       if (absFp.endsWith(".d.ts")) return;
 
       let contents = await fs.readFile(absFp, "utf8");
 
-      contents = contents.replaceAll(esmRegex, (full, _q1, imp1, _q2, imp2) => {
+      // 1) Static imports / exports
+      contents = contents.replaceAll(esmRegex, (full, _, imp1, __, imp2) => {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const importPath = String(imp1 || imp2);
-        const resolveImport = createResolver(absFp);
-        const { resolved, resolvedRelative } = resolveImport(importPath);
+        const newPath = rewriteSpecifier(
+          outDir,
+          outExtensionWithDot,
+          importPath,
+          absFp,
+        );
+        if (!newPath) return full;
+        return full.replace(importPath, newPath);
+      });
 
-        if (!resolved.startsWith(outDir)) return full;
+      // 2) Dynamic imports
+      contents = contents.replaceAll(dynImportRegex, (full, _, spec) => {
+        const strSpec = String(spec);
+        const newPath = rewriteSpecifier(
+          outDir,
+          outExtensionWithDot,
+          strSpec,
+          absFp,
+        );
+        if (!newPath) return full;
+        return full.replace(strSpec, newPath);
+      });
 
-        // Compute the new path:
-        // - If the specifier has an extension, replace it.
-        // - If it doesn't, append the desired extension.
-        const ext = path.extname(resolvedRelative);
-        let newPath = ext
-          ? resolvedRelative.replace(ext, outExtensionWithDot)
-          : `${resolvedRelative}${outExtensionWithDot}`;
-
-        if (!newPath.startsWith(".") && !newPath.startsWith("/")) {
-          newPath = `./${newPath}`;
-        }
-
-        if (/\.jsx?$/.test(resolved)) {
-          // Replace only inside the matched statement to avoid accidental global replacements.
-          const out = full.replace(importPath, newPath);
-
-          return out;
-        }
-        return full;
+      // 3) CommonJS require()
+      contents = contents.replaceAll(requireRegex, (full, _, spec) => {
+        const strSpec = String(spec);
+        const newPath = rewriteSpecifier(
+          outDir,
+          outExtensionWithDot,
+          strSpec,
+          absFp,
+        );
+        if (!newPath) return full;
+        return full.replace(strSpec, newPath);
       });
 
       await fs.writeFile(absFp, contents, "utf8");
+      return absFp;
     }),
   );
 
-  return absoluteBuiltFiles;
+  return absBuiltFiles.filter((fp): fp is string => !!fp);
 }

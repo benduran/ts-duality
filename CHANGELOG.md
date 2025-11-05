@@ -1,3 +1,141 @@
+## 0.1.0 (2025-11-05)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: bumped deps (4a20ca961bd3c22bc01f6183baab6efe0444df49)
+
+---
+
+## 0.0.1-beta.26 (2025-11-05)
+
+### 🛠️ Fixes 🛠️
+
+- fix: changed order of exports appearing in the exports blocks (7439f5e3fca501c7528f520299a344035b5cfe86)
+
+
+
+### 📖 Docs 📖
+
+- docs: added baseline readme (223acca72e41f510abd6617ea00e42b5e2540339)
+
+---
+
+## 0.0.1-beta.25 (2025-11-03)
+
+### ✨ Features ✨
+
+- feat: format rendered files with prettier if it is installed (de2beb34df69c3018cc09c6e03b86211874f74a2)
+
+---
+
+## 0.0.1-beta.24 (2025-11-03)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: removed unused import (d485fc507a7fa8d191d4f3f82702ff4dec5dcea7)
+
+
+
+### 🛠️ Fixes 🛠️
+
+- fix: use the correct file extensions (8b3144b83972c74f070187873100b1dbba9f4d9f)
+
+---
+
+## 0.0.1-beta.23 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: try importing the correct path (b7c61fff595c9313031cb55c1ff9fc8c6c538a4e)
+
+---
+
+## 0.0.1-beta.22 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: added index file detection for folder imports in the resolver (bb10050bea10ca4dce99f519a9458b4b477919b0)
+
+---
+
+## 0.0.1-beta.21 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: trying to fix import resolver (2d19a95febe1a9e4e380eff44e2a8af27f783421)
+
+---
+
+## 0.0.1-beta.20 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: made RUN_DIRECT nullable (ea25deb98cc31f6032f577228b91a68e5daa5ed2)
+
+---
+
+## 0.0.1-beta.19 (2025-11-03)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed commonjs not having paths replaced (0b783756a9900df445b037883bee5481e77bec7a)
+
+---
+
+## 0.0.1-beta.18 (2025-11-03)
+
+### ✨ Features ✨
+
+- feat: added require import rewrites, as well (18ed6cd726d9bef9ae8411516fb0e9df13ecd2ec)
+
+---
+
+## 0.0.1-beta.17 (2025-11-02)
+
+### ✨ Features ✨
+
+- feat: added support for dynamic import rewrites (66ef3978af36f198bcb254259ed4370e68583afe)
+
+---
+
+## 0.0.1-beta.16 (2025-11-02)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed typing file paths to be compatible with the new file extension feature (52761a5c39e754abb83a7dd2d8dc60eabb916927)
+
+---
+
+## 0.0.1-beta.15 (2025-10-30)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed typings not being written with the new file extension handling (67c9388c9e1f1d46188a9179193d51f394d01d78)
+
+---
+
+## 0.0.1-beta.14 (2025-10-30)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed binfile (39b227feb69b7a428d5b29fdb1b8b58cee3c3520)
+
+---
+
+## 0.0.1-beta.13 (2025-10-30)
+
+### ✨ Features ✨
+
+- feat: render cjs or mjs files to disk (b4f35631ccd0678da6ba3425ddf4210766a579bd)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- Merge pull request #3 from benduran/bduran/format-json-with-prettier-if-possible (69b40997652b86268f1be63e668911eca61abc62)
+
+---
+
 ## 0.0.1-beta.12 (2025-10-30)
 
 ### 🛠️ Fixes 🛠️

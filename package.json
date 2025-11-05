@@ -2,7 +2,7 @@
   "name": "@better-builds/ts-duality",
   "description": "A no BS, easy-to-use utility for compiling TypeScript code to both ESM and CJS targets, as well as properly wiring up package.json exports.",
   "packageManager": "bun@1.3.1",
-  "version": "0.0.1-beta.12",
+  "version": "0.1.0",
   "type": "module",
   "bin": "./bin/ts-duality",
   "engines": {
@@ -35,14 +35,14 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@swc/core": "^1.13.5",
+    "@swc/core": "^1.15.0",
     "chalk": "^5.6.2",
     "detect-indent": "^7.0.2",
     "execa": "^9.6.0",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.2",
     "package-manager-detector": "^1.5.0",
-    "type-fest": "^5.1.0",
+    "type-fest": "^5.2.0",
     "yargs": "^18.0.0"
   },
   "optionalDependencies": {
@@ -52,179 +52,189 @@
     "typescript": "^5"
   },
   "exports": {
-    "./compile-code": {
+    "./check-file-exists": {
       "require": {
-        "default": "./dist/cjs/compile-code.js",
-        "types": "./dist/cjs/compile-code.d.ts"
+        "types": "./dist/cjs/check-file-exists.d.ts",
+        "default": "./dist/cjs/check-file-exists.cjs"
       },
       "import": {
-        "default": "./dist/esm/compile-code.js",
-        "types": "./dist/esm/compile-code.d.ts"
+        "types": "./dist/esm/check-file-exists.d.ts",
+        "default": "./dist/esm/check-file-exists.mjs"
+      }
+    },
+    "./compile-code": {
+      "require": {
+        "types": "./dist/cjs/compile-code.d.ts",
+        "default": "./dist/cjs/compile-code.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/compile-code.d.ts",
+        "default": "./dist/esm/compile-code.mjs"
       }
     },
     "./constants": {
       "require": {
-        "default": "./dist/cjs/constants.js",
-        "types": "./dist/cjs/constants.d.ts"
+        "types": "./dist/cjs/constants.d.ts",
+        "default": "./dist/cjs/constants.cjs"
       },
       "import": {
-        "default": "./dist/esm/constants.js",
-        "types": "./dist/esm/constants.d.ts"
+        "types": "./dist/esm/constants.d.ts",
+        "default": "./dist/esm/constants.mjs"
       }
     },
     "./copy-non-source-files": {
       "require": {
-        "default": "./dist/cjs/copy-non-source-files.js",
-        "types": "./dist/cjs/copy-non-source-files.d.ts"
+        "types": "./dist/cjs/copy-non-source-files.d.ts",
+        "default": "./dist/cjs/copy-non-source-files.cjs"
       },
       "import": {
-        "default": "./dist/esm/copy-non-source-files.js",
-        "types": "./dist/esm/copy-non-source-files.d.ts"
+        "types": "./dist/esm/copy-non-source-files.d.ts",
+        "default": "./dist/esm/copy-non-source-files.mjs"
       }
     },
     "./exec-async": {
       "require": {
-        "default": "./dist/cjs/exec-async.js",
-        "types": "./dist/cjs/exec-async.d.ts"
+        "types": "./dist/cjs/exec-async.d.ts",
+        "default": "./dist/cjs/exec-async.cjs"
       },
       "import": {
-        "default": "./dist/esm/exec-async.js",
-        "types": "./dist/esm/exec-async.d.ts"
+        "types": "./dist/esm/exec-async.d.ts",
+        "default": "./dist/esm/exec-async.mjs"
       }
     },
     "./find-tsconfig-file": {
       "require": {
-        "default": "./dist/cjs/find-tsconfig-file.js",
-        "types": "./dist/cjs/find-tsconfig-file.d.ts"
+        "types": "./dist/cjs/find-tsconfig-file.d.ts",
+        "default": "./dist/cjs/find-tsconfig-file.cjs"
       },
       "import": {
-        "default": "./dist/esm/find-tsconfig-file.js",
-        "types": "./dist/esm/find-tsconfig-file.d.ts"
+        "types": "./dist/esm/find-tsconfig-file.d.ts",
+        "default": "./dist/esm/find-tsconfig-file.mjs"
       }
     },
     "./format-with-prettier-if-possible": {
       "require": {
-        "default": "./dist/cjs/format-with-prettier-if-possible.js",
-        "types": "./dist/cjs/format-with-prettier-if-possible.d.ts"
+        "types": "./dist/cjs/format-with-prettier-if-possible.d.ts",
+        "default": "./dist/cjs/format-with-prettier-if-possible.cjs"
       },
       "import": {
-        "default": "./dist/esm/format-with-prettier-if-possible.js",
-        "types": "./dist/esm/format-with-prettier-if-possible.d.ts"
+        "types": "./dist/esm/format-with-prettier-if-possible.d.ts",
+        "default": "./dist/esm/format-with-prettier-if-possible.mjs"
       }
     },
     "./generate-tsconfigs": {
       "require": {
-        "default": "./dist/cjs/generate-tsconfigs.js",
-        "types": "./dist/cjs/generate-tsconfigs.d.ts"
+        "types": "./dist/cjs/generate-tsconfigs.d.ts",
+        "default": "./dist/cjs/generate-tsconfigs.cjs"
       },
       "import": {
-        "default": "./dist/esm/generate-tsconfigs.js",
-        "types": "./dist/esm/generate-tsconfigs.d.ts"
+        "types": "./dist/esm/generate-tsconfigs.d.ts",
+        "default": "./dist/esm/generate-tsconfigs.mjs"
       }
     },
     "./get-common-root-path": {
       "require": {
-        "default": "./dist/cjs/get-common-root-path.js",
-        "types": "./dist/cjs/get-common-root-path.d.ts"
+        "types": "./dist/cjs/get-common-root-path.d.ts",
+        "default": "./dist/cjs/get-common-root-path.cjs"
       },
       "import": {
-        "default": "./dist/esm/get-common-root-path.js",
-        "types": "./dist/esm/get-common-root-path.d.ts"
+        "types": "./dist/esm/get-common-root-path.d.ts",
+        "default": "./dist/esm/get-common-root-path.mjs"
       }
     },
     "./get-indentation": {
       "require": {
-        "default": "./dist/cjs/get-indentation.js",
-        "types": "./dist/cjs/get-indentation.d.ts"
+        "types": "./dist/cjs/get-indentation.d.ts",
+        "default": "./dist/cjs/get-indentation.cjs"
       },
       "import": {
-        "default": "./dist/esm/get-indentation.js",
-        "types": "./dist/esm/get-indentation.d.ts"
+        "types": "./dist/esm/get-indentation.d.ts",
+        "default": "./dist/esm/get-indentation.mjs"
       }
     },
     ".": {
       "require": {
-        "default": "./dist/cjs/index.js",
-        "types": "./dist/cjs/index.d.ts"
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
       },
       "import": {
-        "default": "./dist/esm/index.js",
-        "types": "./dist/esm/index.d.ts"
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.mjs"
       }
     },
     "./inject-extra-exports": {
       "require": {
-        "default": "./dist/cjs/inject-extra-exports.js",
-        "types": "./dist/cjs/inject-extra-exports.d.ts"
+        "types": "./dist/cjs/inject-extra-exports.d.ts",
+        "default": "./dist/cjs/inject-extra-exports.cjs"
       },
       "import": {
-        "default": "./dist/esm/inject-extra-exports.js",
-        "types": "./dist/esm/inject-extra-exports.d.ts"
+        "types": "./dist/esm/inject-extra-exports.d.ts",
+        "default": "./dist/esm/inject-extra-exports.mjs"
       }
     },
     "./logger": {
       "require": {
-        "default": "./dist/cjs/logger.js",
-        "types": "./dist/cjs/logger.d.ts"
+        "types": "./dist/cjs/logger.d.ts",
+        "default": "./dist/cjs/logger.cjs"
       },
       "import": {
-        "default": "./dist/esm/logger.js",
-        "types": "./dist/esm/logger.d.ts"
+        "types": "./dist/esm/logger.d.ts",
+        "default": "./dist/esm/logger.mjs"
       }
     },
     "./resolve-import-path": {
       "require": {
-        "default": "./dist/cjs/resolve-import-path.js",
-        "types": "./dist/cjs/resolve-import-path.d.ts"
+        "types": "./dist/cjs/resolve-import-path.d.ts",
+        "default": "./dist/cjs/resolve-import-path.cjs"
       },
       "import": {
-        "default": "./dist/esm/resolve-import-path.js",
-        "types": "./dist/esm/resolve-import-path.d.ts"
+        "types": "./dist/esm/resolve-import-path.d.ts",
+        "default": "./dist/esm/resolve-import-path.mjs"
       }
     },
     "./run-with-pm": {
       "require": {
-        "default": "./dist/cjs/run-with-pm.js",
-        "types": "./dist/cjs/run-with-pm.d.ts"
+        "types": "./dist/cjs/run-with-pm.d.ts",
+        "default": "./dist/cjs/run-with-pm.cjs"
       },
       "import": {
-        "default": "./dist/esm/run-with-pm.js",
-        "types": "./dist/esm/run-with-pm.d.ts"
+        "types": "./dist/esm/run-with-pm.d.ts",
+        "default": "./dist/esm/run-with-pm.mjs"
       }
     },
     "./ts-duality-lib": {
       "require": {
-        "default": "./dist/cjs/ts-duality-lib.js",
-        "types": "./dist/cjs/ts-duality-lib.d.ts"
+        "types": "./dist/cjs/ts-duality-lib.d.ts",
+        "default": "./dist/cjs/ts-duality-lib.cjs"
       },
       "import": {
-        "default": "./dist/esm/ts-duality-lib.js",
-        "types": "./dist/esm/ts-duality-lib.d.ts"
+        "types": "./dist/esm/ts-duality-lib.d.ts",
+        "default": "./dist/esm/ts-duality-lib.mjs"
       }
     },
     "./ts-duality": {
       "require": {
-        "default": "./dist/cjs/ts-duality.js",
-        "types": "./dist/cjs/ts-duality.d.ts"
+        "types": "./dist/cjs/ts-duality.d.ts",
+        "default": "./dist/cjs/ts-duality.cjs"
       },
       "import": {
-        "default": "./dist/esm/ts-duality.js",
-        "types": "./dist/esm/ts-duality.d.ts"
+        "types": "./dist/esm/ts-duality.d.ts",
+        "default": "./dist/esm/ts-duality.mjs"
       }
     },
     "./types": {
       "require": {
-        "default": "./dist/cjs/types.js",
-        "types": "./dist/cjs/types.d.ts"
+        "types": "./dist/cjs/types.d.ts",
+        "default": "./dist/cjs/types.cjs"
       },
       "import": {
-        "default": "./dist/esm/types.js",
-        "types": "./dist/esm/types.d.ts"
+        "types": "./dist/esm/types.d.ts",
+        "default": "./dist/esm/types.mjs"
       }
     },
     "./package.json": "./package.json"
   },
-  "module": "./dist/esm/index.js",
+  "module": "./dist/esm/index.mjs",
   "types": "./dist/cjs/index.d.ts",
-  "main": "./dist/cjs/index.js"
+  "main": "./dist/cjs/index.cjs"
 }

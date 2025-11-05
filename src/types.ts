@@ -12,6 +12,7 @@ export type CompileTsOpts = {
   noStripLeading: boolean;
   noDts: boolean;
   outDir: string;
+  outExtension: "cjs" | "mjs" | "js";
   parsedTsConfig: TsConfigJson;
   jsxRuntime: JSXRuntime;
   tsconfig: string;

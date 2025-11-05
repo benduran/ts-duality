@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import { setupCLI } from "../dist/esm/ts-duality.js";
+import { setupCLI } from "../dist/esm/ts-duality.mjs";
 
 setupCLI();

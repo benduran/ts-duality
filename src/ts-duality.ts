@@ -1,3 +1,6 @@
+/* eslint-disable n/no-process-env */
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
+/* eslint-disable @typescript-eslint/no-namespace */
 import createCLI from "yargs";
 import { hideBin } from "yargs/helpers";
 
@@ -88,4 +91,16 @@ or you are mixing roots from across your package, your typings might end up in a
     .help().argv;
 
   await buildTsPackage(rest as TSDualityLibOpts);
+}
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      RUN_DIRECT?: string;
+    }
+  }
+}
+
+if (process.env.RUN_DIRECT?.toLowerCase() === "true") {
+  await setupCLI();
 }
