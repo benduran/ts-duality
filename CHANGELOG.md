@@ -1,3 +1,11 @@
+## 0.1.0 (2025-11-05)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: bumped deps (4a20ca961bd3c22bc01f6183baab6efe0444df49)
+
+---
+
 ## 0.0.1-beta.26 (2025-11-05)
 
 ### 🛠️ Fixes 🛠️
