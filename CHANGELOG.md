@@ -1,3 +1,17 @@
+## 0.1.1 (2025-11-06)
+
+### 📖 Docs 📖
+
+- docs: added missing docs and repo linkage (8d7a909eaaa950110f807b67605968f1913c4bc0)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- Merge pull request #4 from benduran/bduran/render-files-with-specific-extensions (4b2ec216dcd4cad63ea7fc4b041a07dad2dfdb76)
+
+---
+
 ## 0.1.0 (2025-11-05)
 
 ### 🔀 Miscellaneous 🔀
