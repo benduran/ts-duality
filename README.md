@@ -7,6 +7,10 @@ You can optionally target one-specific output, or you can just compile without g
 
 `ts-duality` will also render CJS and ESM modules with their correct `.cjs` and `.esm` formats, respectively, while ensuring that any relative imports used in your code are rewritten to also point to `.cjs` and `.esm` files.
 
+Every file that TypeScript detects as part of your source will be automatically added to your `package.json#exports`, and if there is a an index file, this will be linked as your `package.json#main` and `package.json#module`.
+
+For an example of what this looks like, checkout the [package.json file](./package.json) for `ts-duality`. `ts-duality` is compiled by itself 🔁.
+
 ## Get Started
 
 ### Installation
@@ -88,6 +92,7 @@ Options:
                                                       [boolean] [default: false]
   --help              Show help                                        [boolean]
 ```
+
 ### JavaScript API
 
 If you would prefer to interact with `ts-duality` in a JavaScript or TypeScript file, you can import its API as follows:

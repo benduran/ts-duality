@@ -5,6 +5,16 @@
   "version": "0.1.0",
   "type": "module",
   "bin": "./bin/ts-duality",
+  "license": "GPL-3.0-only",
+  "author": "Benjamin Duran <stratodyne@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/benduran/ts-duality/issues"
+  },
+  "homepage": "https://github.com/benduran/ts-duality#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benduran/ts-duality.git"
+  },
   "engines": {
     "bun": ">=1.3.0",
     "node": ">=22.14.0"
