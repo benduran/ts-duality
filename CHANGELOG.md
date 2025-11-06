@@ -1,3 +1,12 @@
+## 0.1.2 (2025-11-06)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: removed the formatting of dist code with prettier because it's waste of CPU time (d104d663ebbd03a118b67005f17b676f01e07fdc)
+- chore: upgraded to latest eslint config (6344ac4cad4952d925354e9a7de8316df7a5a622)
+
+---
+
 ## 0.1.1 (2025-11-06)
 
 ### 📖 Docs 📖
