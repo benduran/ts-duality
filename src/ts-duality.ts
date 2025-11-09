@@ -36,12 +36,6 @@ to match where they were in your source folder`,
       description: "the CWD to use when building",
       type: "string",
     })
-    .option("generateTsconfig", {
-      default: false,
-      description:
-        "if set, will NOT build, but instead, will generate reasonable default TSConfig files that will work with dual publishing, and in most other use cases, as well",
-      type: "boolean",
-    })
     .option("jsx", {
       choices: ALLOWED_JSX_RUNTIMES,
       default: "automatic",

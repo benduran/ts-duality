@@ -49,10 +49,6 @@ export type TSDualityLibOpts = {
    */
   cwd: string;
   /**
-   * if set, will NOT build, but instead, will generate reasonable default TSConfig files that will work with dual publishing, and in most other use cases, as well
-   */
-  generateTsconfig: boolean;
-  /**
    * the type of JSX runtime to use when compiling your code
    */
   jsx: JSXRuntime;

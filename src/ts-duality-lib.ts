@@ -9,7 +9,6 @@ import { compileCode } from "./compile-code.js";
 import { copyNonSourceFiles } from "./copy-non-source-files.js";
 import { findTsconfigFile } from "./find-tsconfig-file.js";
 import { formatWithPrettierIfPossible } from "./format-with-prettier-if-possible.js";
-import { generateTsconfigs } from "./generate-tsconfigs.js";
 import { getIndentationSize } from "./get-indentation.js";
 import type { PackageJsonWithPossibleConfig } from "./inject-extra-exports.js";
 import { injectExtraExports } from "./inject-extra-exports.js";
@@ -27,7 +26,6 @@ export async function buildTsPackage({
   clean,
   copyOtherFiles,
   cwd: absOrRelativeCwd,
-  generateTsconfig,
   jsx,
   noCjs,
   noDts,
@@ -40,10 +38,6 @@ export async function buildTsPackage({
   const cwd = path.isAbsolute(absOrRelativeCwd)
     ? absOrRelativeCwd
     : path.resolve(absOrRelativeCwd);
-
-  if (generateTsconfig) {
-    return generateTsconfigs(cwd);
-  }
 
   const outDirPath = path.isAbsolute(outDir) ? outDir : path.join(cwd, outDir);
 
