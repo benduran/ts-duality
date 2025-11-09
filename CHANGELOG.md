@@ -1,3 +1,17 @@
+## 0.2.0 (2025-11-09)
+
+### ✨ Features ✨
+
+- feat: always generate a tsconfig.build.json file and use that, unless an explicit override was given (320ef47f628e6c544ee4464fa4d88faf56c83806)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- Merge pull request #5 from benduran/bduran/no-format-dist (73b98db1c7fe34ec1716d1be0bb13c3db2aae7bf)
+
+---
+
 ## 0.1.2 (2025-11-06)
 
 ### 🔀 Miscellaneous 🔀
