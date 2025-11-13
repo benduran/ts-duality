@@ -1,3 +1,11 @@
+## 0.2.1 (2025-11-13)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: updated README and bumped eslint dep (3ba436ce2ac30c4b4c09e4584d797c3fbb0b4c53)
+
+---
+
 ## 0.2.0 (2025-11-09)
 
 ### ✨ Features ✨
