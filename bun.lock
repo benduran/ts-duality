@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "@better-builds/ts-duality",
@@ -21,7 +22,7 @@
         "@types/fs-extra": "^11.0.4",
         "@types/node": ">=22",
         "@types/yargs": "^17.0.34",
-        "eslint-config-react-yas": "^6.0.4",
+        "eslint-config-react-yas": "^6.0.5",
         "husky": "^9.1.7",
         "typescript": "^5",
       },
@@ -472,7 +473,7 @@
 
     "doctrine": ["doctrine@2.1.0", "", { "dependencies": { "esutils": "^2.0.2" } }, "sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw=="],
 
-    "dom-accessibility-api": ["dom-accessibility-api@0.6.3", "", {}, "sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w=="],
+    "dom-accessibility-api": ["dom-accessibility-api@0.5.16", "", {}, "sha512-X7BJ2yElsnOJ30pZF4uIIDfBEVgF4XEBxL9Bxhy6dnrm5hkzqmsWHGTiHqRiITNhMyFLyAiWndIJP7Z1NTteDg=="],
 
     "dot-prop": ["dot-prop@5.3.0", "", { "dependencies": { "is-obj": "^2.0.0" } }, "sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q=="],
 
@@ -524,7 +525,7 @@
 
     "eslint-config-prettier": ["eslint-config-prettier@10.1.8", "", { "peerDependencies": { "eslint": ">=7.0.0" }, "bin": { "eslint-config-prettier": "bin/cli.js" } }, "sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w=="],
 
-    "eslint-config-react-yas": ["eslint-config-react-yas@6.0.4", "", { "dependencies": { "@cprussin/eslint-config": "^5.0.0", "eslint": "^9.22.0", "eslint-config-prettier": "^10.1.8", "eslint-plugin-detect-bad-words": "^1.0.7", "eslint-plugin-prettier": "^5.5.4", "prettier": "^3.6.2" } }, "sha512-DaMQOYspfgiKxgoflpwAHZu0+rEw6bs6lHv1/gjd6pM0gVs5id6tUc2D1Zn46F1Ylk4eF0XnGc95Ud31uZCFJg=="],
+    "eslint-config-react-yas": ["eslint-config-react-yas@6.0.5", "", { "dependencies": { "@cprussin/eslint-config": "^5.0.0", "eslint": "^9.22.0", "eslint-config-prettier": "^10.1.8", "eslint-plugin-detect-bad-words": "^1.0.7", "eslint-plugin-prettier": "^5.5.4", "prettier": "^3.6.2" } }, "sha512-zHpElG8oltLXzM+excsdlqG8qKDjoNaZ/Uc+K5FWzI7dcChaJSmQgvYQz4uH+O214sQ4uZ8/KglaapHPkb+NFg=="],
 
     "eslint-config-turbo": ["eslint-config-turbo@2.6.0", "", { "dependencies": { "eslint-plugin-turbo": "2.6.0" }, "peerDependencies": { "eslint": ">6.6.0", "turbo": ">2.0.0" } }, "sha512-WdNSKL1vTl5IGyovn8w3xkaEKsK2n+l9Ybk+4oISptcom/vz9sO/9QcjEKuZSXG0zxrj9Oyx/UZA04hRxmOe+Q=="],
 
@@ -1286,7 +1287,7 @@
 
     "@testing-library/dom/aria-query": ["aria-query@5.3.0", "", { "dependencies": { "dequal": "^2.0.3" } }, "sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A=="],
 
-    "@testing-library/dom/dom-accessibility-api": ["dom-accessibility-api@0.5.16", "", {}, "sha512-X7BJ2yElsnOJ30pZF4uIIDfBEVgF4XEBxL9Bxhy6dnrm5hkzqmsWHGTiHqRiITNhMyFLyAiWndIJP7Z1NTteDg=="],
+    "@testing-library/jest-dom/dom-accessibility-api": ["dom-accessibility-api@0.6.3", "", {}, "sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w=="],
 
     "@typescript-eslint/eslint-plugin/ignore": ["ignore@7.0.5", "", {}, "sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg=="],
 

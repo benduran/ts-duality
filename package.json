@@ -39,7 +39,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": ">=22",
     "@types/yargs": "^17.0.34",
-    "eslint-config-react-yas": "^6.0.4",
+    "eslint-config-react-yas": "^6.0.5",
     "prettier": "^3",
     "husky": "^9.1.7",
     "typescript": "^5"
