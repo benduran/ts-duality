@@ -65,6 +65,13 @@ export type TSDualityLibOpts = {
    */
   noEsm: boolean;
   /**
+   * if true, will NOT modify your package.json file
+   * to generate main, module and exports fields.
+   *
+   * Use this if you just want a simple transpiler that strips your typescript types.
+   */
+  noGenerateExports: boolean;
+  /**
    * if set, will not strip the leading, last common portion of your input file paths when writing output file paths. if your code is located in a "src/" folder, you want to leave this unset.
    * NOTE: this does *not* affect how typescript compiles typings, so if your tsconfig#compilerOptions#rootDir is misconfigured,
    * or you are mixing roots from across your package, your typings might end up in a different folder than you expect

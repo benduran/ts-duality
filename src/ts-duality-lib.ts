@@ -30,6 +30,7 @@ export async function buildTsPackage({
   noCjs,
   noDts,
   noEsm,
+  noGenerateExports,
   noStripLeading,
   outDir,
   tsconfig: tsconfigOverride,
@@ -120,6 +121,8 @@ export async function buildTsPackage({
       if (copyOtherFiles) {
         await copyNonSourceFiles(cwd, tscFoundFiles, outDir);
       }
+
+      if (noGenerateExports) continue;
 
       const builtFiles = absoluteBuiltFiles
         .map((fp) => {

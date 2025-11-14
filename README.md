@@ -48,45 +48,52 @@ To see the help menu and all of its options, run `npx ts-duality --help`:
 
 ```bash
 Options:
-  --version         Show version number                                [boolean]
-  --clean           if set, will clean out the build dirs before compiling
-                    anything                          [boolean] [default: false]
-  --copyOtherFiles  if true, will copy any non source files (anything that
-                    doesn't end with .js, .jsx, .cjs, .mts, .ts or .tsx)
-                    to the output folder, while maintining the location of the
-                    files
-                    to match where they were in your source folder
+  --version            Show version number                             [boolean]
+  --clean              if set, will clean out the build dirs before compiling
+                       anything                       [boolean] [default: false]
+  --copyOtherFiles     if true, will copy any non source files (anything that
+                       doesn't end with .js, .jsx, .cjs, .mts, .ts or .tsx)
+                       to the output folder, while maintining the location of
+                       the files
+                       to match where they were in your source folder
                                                       [boolean] [default: false]
-  --cwd             the CWD to use when building
+  --cwd                the CWD to use when building
        [string] [default: "/Users/benjaminduran/dddddddd/opensource/ts-duality"]
-  --jsx             the type of JSX runtime to use when compiling your code
+  --jsx                the type of JSX runtime to use when compiling your code
    [string] [choices: "automatic", "classic", "preserve"] [default: "automatic"]
-  --noCjs           if true, will not build the CommonJS variant of this package
+  --noCjs              if true, will not build the CommonJS variant of this
+                       package                        [boolean] [default: false]
+  --noDts              if set, will not write typescript typings
                                                       [boolean] [default: false]
-  --noDts           if set, will not write typescript typings
+  --noEsm              if true, will not build the ESM variant of this package
                                                       [boolean] [default: false]
-  --noEsm           if true, will not build the ESM variant of this package
+  --noGenerateExports
+                        if true, will NOT modify your package.json file
+                        to generate main, module and exports fields.
+
+                        Use this if you just want a simple transpiler that
+                        strips your typescript types.
                                                       [boolean] [default: false]
-  --noStripLeading  if set, will not strip the leading, last common portion of
-                    your input file paths when writing output file paths. if
-                    your code is located in a "src/" folder, you want to leave
-                    this unset.
-                    NOTE: this does *not* affect how typescript compiles
-                    typings, so if your tsconfig#compilerOptions#rootDir is
-                    misconfigured,
-                    or you are mixing roots from across your package, your
-                    typings might end up in a different folder than you expect
-                                                      [boolean] [default: false]
-  --outDir          the folder where the built files will be written
+  --noStripLeading     if set, will not strip the leading, last common portion
+                       of your input file paths when writing output file paths.
+                       if your code is located in a "src/" folder, you want to
+                       leave this unset.
+                       NOTE: this does *not* affect how typescript compiles
+                       typings, so if your tsconfig#compilerOptions#rootDir is
+                       misconfigured,
+                       or you are mixing roots from across your package, your
+                       typings might end up in a different folder than you
+                       expect                         [boolean] [default: false]
+  --outDir             the folder where the built files will be written
                                                       [string] [default: "dist"]
-  --tsconfig        if provided, will explicitly use this tsconfig.json location
-                    instead of searching for a tsconfig.build.json or a plain
-                    tsconfig.json                                       [string]
-  --watch           if set, will automatically watch for any changes to this
-                    library and rebuild, making it easier for you to consume
-                    changes in the monorepo while doing local development
+  --tsconfig           if provided, will explicitly use this tsconfig.json
+                       location instead of searching for a tsconfig.build.json
+                       or a plain tsconfig.json                         [string]
+  --watch              if set, will automatically watch for any changes to this
+                       library and rebuild, making it easier for you to consume
+                       changes in the monorepo while doing local development
                                                       [boolean] [default: false]
-  --help            Show help                                          [boolean]
+  --help               Show help                                       [boolean]
 ```
 
 ### JavaScript API

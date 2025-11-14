@@ -58,6 +58,16 @@ to match where they were in your source folder`,
       description: "if true, will not build the ESM variant of this package",
       type: "boolean",
     })
+    .option("noGenerateExports", {
+      default: false,
+      description: `
+if true, will NOT modify your package.json file
+to generate main, module and exports fields.
+
+Use this if you just want a simple transpiler that strips your typescript types.
+`,
+      type: "boolean",
+    })
     .option("noStripLeading", {
       default: false,
       description: `if set, will not strip the leading, last common portion of your input file paths when writing output file paths. if your code is located in a "src/" folder, you want to leave this unset.
