@@ -1,3 +1,11 @@
+## 0.3.0 (2025-11-14)
+
+### ✨ Features ✨
+
+- feat: added a flag to allow for pure transpilation (ef0cb6ebec50128f1a71ac43700b1ba5de70e64e)
+
+---
+
 ## 0.2.1 (2025-11-13)
 
 ### 🔀 Miscellaneous 🔀
