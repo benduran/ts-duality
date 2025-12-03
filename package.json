@@ -162,6 +162,16 @@
         "default": "./dist/esm/get-indentation.mjs"
       }
     },
+    "./glob": {
+      "require": {
+        "types": "./dist/cjs/glob.d.ts",
+        "default": "./dist/cjs/glob.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/glob.d.ts",
+        "default": "./dist/esm/glob.mjs"
+      }
+    },
     ".": {
       "require": {
         "types": "./dist/cjs/index.d.ts",
@@ -190,6 +200,16 @@
       "import": {
         "types": "./dist/esm/logger.d.ts",
         "default": "./dist/esm/logger.mjs"
+      }
+    },
+    "./normalize-path": {
+      "require": {
+        "types": "./dist/cjs/normalize-path.d.ts",
+        "default": "./dist/cjs/normalize-path.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/normalize-path.d.ts",
+        "default": "./dist/esm/normalize-path.mjs"
       }
     },
     "./resolve-import-path": {
