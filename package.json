@@ -28,7 +28,6 @@
     "clean": "rm -rf dist/",
     "lint": "eslint './src'",
     "lint:fix": "eslint './src' --fix",
-    "prepare": "husky",
     "start": "bun ./build.ts",
     "typecheck": "tsc"
   },
