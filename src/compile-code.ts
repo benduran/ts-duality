@@ -6,7 +6,7 @@ import type { TsConfigJson } from "type-fest";
 
 import { formatWithPrettierIfPossible } from "./format-with-prettier-if-possible.js";
 import { getIndentationSize } from "./get-indentation.js";
-import { glob } from "./glob.js";
+import { glob } from "./glob-get.js";
 import { Logger } from "./logger.js";
 import { createResolver } from "./resolve-import-path.js";
 import { runWithPm } from "./run-with-pm.js";

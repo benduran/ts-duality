@@ -161,14 +161,14 @@
         "default": "./dist/esm/get-indentation.mjs"
       }
     },
-    "./glob": {
+    "./glob-get": {
       "require": {
-        "types": "./dist/cjs/glob.d.ts",
-        "default": "./dist/cjs/glob.cjs"
+        "types": "./dist/cjs/glob-get.d.ts",
+        "default": "./dist/cjs/glob-get.cjs"
       },
       "import": {
-        "types": "./dist/esm/glob.d.ts",
-        "default": "./dist/esm/glob.mjs"
+        "types": "./dist/esm/glob-get.d.ts",
+        "default": "./dist/esm/glob-get.mjs"
       }
     },
     ".": {

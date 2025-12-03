@@ -3,7 +3,7 @@ import path from "node:path";
 import fs from "fs-extra";
 
 import { getCommonRootPath } from "./get-common-root-path.js";
-import { glob } from "./glob.js";
+import { glob } from "./glob-get.js";
 import { Logger } from "./logger.js";
 
 const SOURCE_FILES_ONLY = /\.(cjs|mts|js|jsx|ts|tsx)$/;
