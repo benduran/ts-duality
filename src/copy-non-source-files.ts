@@ -1,9 +1,9 @@
 import path from "node:path";
 
-import glob from "fast-glob";
 import fs from "fs-extra";
 
 import { getCommonRootPath } from "./get-common-root-path.js";
+import { glob } from "./glob.js";
 import { Logger } from "./logger.js";
 
 const SOURCE_FILES_ONLY = /\.(cjs|mts|js|jsx|ts|tsx)$/;
@@ -20,9 +20,7 @@ export async function copyNonSourceFiles(
 
   const globs = [path.join(rootDir, "**", "*")];
 
-  const allFiles = await Promise.all(
-    globs.map((g) => glob(g, { absolute: true, onlyFiles: true })),
-  );
+  const allFiles = await Promise.all(globs.map((g) => glob(g)));
 
   const nonSrcFiles = allFiles
     .flat()

@@ -1,12 +1,12 @@
 import path from "node:path";
 
 import { transformFile } from "@swc/core";
-import glob from "fast-glob";
 import fs from "fs-extra";
 import type { TsConfigJson } from "type-fest";
 
 import { formatWithPrettierIfPossible } from "./format-with-prettier-if-possible.js";
 import { getIndentationSize } from "./get-indentation.js";
+import { glob } from "./glob.js";
 import { Logger } from "./logger.js";
 import { createResolver } from "./resolve-import-path.js";
 import { runWithPm } from "./run-with-pm.js";
@@ -171,13 +171,10 @@ export async function compileCode(opts: CompileTsOpts) {
   await Promise.all(swcCompilationPromises);
 
   const absoluteBuiltFiles = await glob(
-    [
-      path.join(outDir, "**", "*.d.ts"),
-      path.join(outDir, "**", "*.js"),
-      path.join(outDir, "**", "*.cjs"),
-      path.join(outDir, "**", "*.mjs"),
-    ],
-    { absolute: true, onlyFiles: true },
+    path.join(outDir, "**", "*.d.ts"),
+    path.join(outDir, "**", "*.js"),
+    path.join(outDir, "**", "*.cjs"),
+    path.join(outDir, "**", "*.mjs"),
   );
 
   // Matches ESM import/export statements and captures the module specifier

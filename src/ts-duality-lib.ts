@@ -13,6 +13,7 @@ import { getIndentationSize } from "./get-indentation.js";
 import type { PackageJsonWithPossibleConfig } from "./inject-extra-exports.js";
 import { injectExtraExports } from "./inject-extra-exports.js";
 import { Logger } from "./logger.js";
+import { normalizePath } from "./normalize-path.js";
 import { runWithPm } from "./run-with-pm.js";
 import type {
   ExportsObject,
@@ -149,13 +150,13 @@ export async function buildTsPackage({
             ".d.ts",
           );
           if (await checkFileExists(cwd, indexTypingFilePath)) {
-            pjson.types = indexTypingFilePath;
+            pjson.types = normalizePath(indexTypingFilePath);
           }
         }
         if (format === "esm") {
-          pjson.module = fixedIndexFile;
+          pjson.module = normalizePath(fixedIndexFile);
         } else {
-          pjson.main = fixedIndexFile;
+          pjson.main = normalizePath(fixedIndexFile);
         }
       }
 
@@ -198,12 +199,12 @@ export async function buildTsPackage({
             possibleTypingFile,
           );
           if (typingFileExists) {
-            target.types = possibleTypingFile;
+            target.types = normalizePath(possibleTypingFile);
           }
         }
 
         // Assign default JS entry
-        target.default = fpWithBasename;
+        target.default = normalizePath(fpWithBasename);
         exports[key] = tempExports;
       }
 
