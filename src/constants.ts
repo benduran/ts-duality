@@ -1,7 +1,7 @@
-import type { CompileTsOpts } from "./types.js";
+import type { CompileTsOpts } from './types.js';
 
-export const ALLOWED_JSX_RUNTIMES: CompileTsOpts["jsxRuntime"][] = [
-  "automatic",
-  "classic",
-  "preserve",
+export const ALLOWED_JSX_RUNTIMES: CompileTsOpts['jsxRuntime'][] = [
+  'automatic',
+  'classic',
+  'preserve',
 ];

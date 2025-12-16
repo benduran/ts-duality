@@ -3,7 +3,7 @@ type Config = Partial<{
 }>;
 
 export type PackageJsonWithPossibleConfig = Partial<{
-  "ts-duality": Config;
+  'ts-duality': Config;
   exports: Record<string, unknown>;
 }>;
 
@@ -12,7 +12,7 @@ export type PackageJsonWithPossibleConfig = Partial<{
  * export statements into the existing block, if avaialble
  */
 export function injectExtraExports(pjson: PackageJsonWithPossibleConfig) {
-  const config = pjson["ts-duality"];
+  const config = pjson['ts-duality'];
 
   if (!config?.extraExports) return pjson;
 

@@ -1,1 +1,1 @@
-export * from "./ts-duality-lib.js";
+export * from './ts-duality-lib.js';

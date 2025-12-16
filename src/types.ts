@@ -1,9 +1,9 @@
-import type { ReactConfig } from "@swc/core";
-import type { TsConfigJson } from "type-fest";
+import type { ReactConfig } from '@swc/core';
+import type { TsConfigJson } from 'type-fest';
 
-export type ModuleType = "cjs" | "esm";
+export type ModuleType = 'cjs' | 'esm';
 
-export type JSXRuntime = ReactConfig["runtime"];
+export type JSXRuntime = ReactConfig['runtime'];
 
 export type CompileTsOpts = {
   cwd: string;
@@ -12,7 +12,7 @@ export type CompileTsOpts = {
   noStripLeading: boolean;
   noDts: boolean;
   outDir: string;
-  outExtension: "cjs" | "mjs" | "js";
+  outExtension: 'cjs' | 'mjs' | 'js';
   parsedTsConfig: TsConfigJson;
   jsxRuntime: JSXRuntime;
   tsconfig: string;

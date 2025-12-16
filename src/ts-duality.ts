@@ -1,12 +1,12 @@
 /* eslint-disable n/no-process-env */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 /* eslint-disable @typescript-eslint/no-namespace */
-import createCLI from "yargs";
-import { hideBin } from "yargs/helpers";
+import createCLI from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
-import { ALLOWED_JSX_RUNTIMES } from "./constants.js";
-import { buildTsPackage } from "./ts-duality-lib.js";
-import type { TSDualityLibOpts } from "./types.js";
+import { ALLOWED_JSX_RUNTIMES } from './constants.js';
+import { buildTsPackage } from './ts-duality-lib.js';
+import type { TSDualityLibOpts } from './types.js';
 
 export async function setupCLI() {
   const yargs = createCLI(hideBin(process.argv));
@@ -17,48 +17,48 @@ export async function setupCLI() {
     /* eslint-enable @typescript-eslint/no-unused-vars */
     ...rest
   } = await yargs
-    .scriptName("build-ts-package")
-    .option("clean", {
+    .scriptName('build-ts-package')
+    .option('clean', {
       default: false,
       description:
-        "if set, will clean out the build dirs before compiling anything",
-      type: "boolean",
+        'if set, will clean out the build dirs before compiling anything',
+      type: 'boolean',
     })
-    .option("copyOtherFiles", {
+    .option('copyOtherFiles', {
       default: false,
       description: `if true, will copy any non source files (anything that doesn't end with .js, .jsx, .cjs, .mts, .ts or .tsx)
 to the output folder, while maintining the location of the files
 to match where they were in your source folder`,
-      type: "boolean",
+      type: 'boolean',
     })
-    .option("cwd", {
+    .option('cwd', {
       default: process.cwd(),
-      description: "the CWD to use when building",
-      type: "string",
+      description: 'the CWD to use when building',
+      type: 'string',
     })
-    .option("jsx", {
+    .option('jsx', {
       choices: ALLOWED_JSX_RUNTIMES,
-      default: "automatic",
-      description: "the type of JSX runtime to use when compiling your code",
-      type: "string",
+      default: 'automatic',
+      description: 'the type of JSX runtime to use when compiling your code',
+      type: 'string',
     })
-    .option("noCjs", {
+    .option('noCjs', {
       default: false,
       description:
-        "if true, will not build the CommonJS variant of this package",
-      type: "boolean",
+        'if true, will not build the CommonJS variant of this package',
+      type: 'boolean',
     })
-    .option("noDts", {
+    .option('noDts', {
       default: false,
-      description: "if set, will not write typescript typings",
-      type: "boolean",
+      description: 'if set, will not write typescript typings',
+      type: 'boolean',
     })
-    .option("noEsm", {
+    .option('noEsm', {
       default: false,
-      description: "if true, will not build the ESM variant of this package",
-      type: "boolean",
+      description: 'if true, will not build the ESM variant of this package',
+      type: 'boolean',
     })
-    .option("noGenerateExports", {
+    .option('noGenerateExports', {
       default: false,
       description: `
 if true, will NOT modify your package.json file
@@ -66,30 +66,30 @@ to generate main, module and exports fields.
 
 Use this if you just want a simple transpiler that strips your typescript types.
 `,
-      type: "boolean",
+      type: 'boolean',
     })
-    .option("noStripLeading", {
+    .option('noStripLeading', {
       default: false,
       description: `if set, will not strip the leading, last common portion of your input file paths when writing output file paths. if your code is located in a "src/" folder, you want to leave this unset.
 NOTE: this does *not* affect how typescript compiles typings, so if your tsconfig#compilerOptions#rootDir is misconfigured,
 or you are mixing roots from across your package, your typings might end up in a different folder than you expect`,
-      type: "boolean",
+      type: 'boolean',
     })
-    .option("outDir", {
-      default: "dist",
-      description: "the folder where the built files will be written",
-      type: "string",
+    .option('outDir', {
+      default: 'dist',
+      description: 'the folder where the built files will be written',
+      type: 'string',
     })
-    .option("tsconfig", {
+    .option('tsconfig', {
       description:
-        "if provided, will explicitly use this tsconfig.json location instead of searching for a tsconfig.build.json or a plain tsconfig.json",
-      type: "string",
+        'if provided, will explicitly use this tsconfig.json location instead of searching for a tsconfig.build.json or a plain tsconfig.json',
+      type: 'string',
     })
-    .option("watch", {
+    .option('watch', {
       default: false,
       description:
-        "if set, will automatically watch for any changes to this library and rebuild, making it easier for you to consume changes in the monorepo while doing local development",
-      type: "boolean",
+        'if set, will automatically watch for any changes to this library and rebuild, making it easier for you to consume changes in the monorepo while doing local development',
+      type: 'boolean',
     })
     .strict()
     .help().argv;
@@ -105,6 +105,6 @@ declare global {
   }
 }
 
-if (process.env.RUN_DIRECT?.toLowerCase() === "true") {
+if (process.env.RUN_DIRECT?.toLowerCase() === 'true') {
   await setupCLI();
 }

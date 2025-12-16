@@ -1,4 +1,4 @@
-import path from "node:path";
+import path from 'node:path';
 
 const PATH_SEP_REGEX = /\/|\\/;
 
@@ -8,7 +8,7 @@ const PATH_SEP_REGEX = /\/|\\/;
  * is no common root.
  */
 export function getCommonRootPath(paths: string[]): string {
-  if (paths.length === 0) return "";
+  if (paths.length === 0) return '';
 
   // Split each path into segments
   const splitPaths = paths.map((p) => p.split(PATH_SEP_REGEX).filter(Boolean));
@@ -21,12 +21,11 @@ export function getCommonRootPath(paths: string[]): string {
     // If all paths share this segment at this position, keep it
     if (splitPaths.every((parts) => parts[i] === segment)) {
       commonSegments.push(segment);
-      continue;
     }
   }
 
   // If nothing in common, return empty string
-  if (commonSegments.length === 0) return "";
+  if (commonSegments.length === 0) return '';
 
   // Preserve absolute path prefix if present
   const startsWithSlash = paths[0]?.startsWith(path.sep);

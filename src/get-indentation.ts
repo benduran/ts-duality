@@ -1,4 +1,4 @@
-import detectIndent from "detect-indent";
+import detectIndent from 'detect-indent';
 
 /**
  * detects the indentation size for a given file

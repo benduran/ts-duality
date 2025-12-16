@@ -1,6 +1,6 @@
-import path from "node:path";
+import path from 'node:path';
 
-import fs from "fs-extra";
+import fs from 'fs-extra';
 
 /**
  * as the name suggests, this checks whether a file path exists

@@ -1,7 +1,7 @@
-import path from "node:path";
+import path from 'node:path';
 
-import { Logger } from "./logger.js";
-import { runWithPm } from "./run-with-pm.js";
+import { Logger } from './logger.js';
+import { runWithPm } from './run-with-pm.js';
 
 /**
  * if the user has prettier installed in their repo,
@@ -16,7 +16,7 @@ export async function formatWithPrettierIfPossible(
     // this will fail if prettier is not installed, and that's fine
     await runWithPm(`prettier --write '${relPathToFormat}'`, {
       cwd,
-      stdio: "pipe",
+      stdio: 'pipe',
     });
     Logger.info(`formatted ${relPathToFormat} with prettier`);
   } catch {

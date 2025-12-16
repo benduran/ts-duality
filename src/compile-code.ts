@@ -1,16 +1,16 @@
-import path from "node:path";
+import path from 'node:path';
 
-import { transformFile } from "@swc/core";
-import fs from "fs-extra";
-import type { TsConfigJson } from "type-fest";
+import { transformFile } from '@swc/core';
+import fs from 'fs-extra';
+import type { TsConfigJson } from 'type-fest';
 
-import { formatWithPrettierIfPossible } from "./format-with-prettier-if-possible.js";
-import { getIndentationSize } from "./get-indentation.js";
-import { glob } from "./glob-get.js";
-import { Logger } from "./logger.js";
-import { createResolver } from "./resolve-import-path.js";
-import { runWithPm } from "./run-with-pm.js";
-import type { CompileTsOpts } from "./types.js";
+import { formatWithPrettierIfPossible } from './format-with-prettier-if-possible.js';
+import { getIndentationSize } from './get-indentation.js';
+import { glob } from './glob-get.js';
+import { Logger } from './logger.js';
+import { createResolver } from './resolve-import-path.js';
+import { runWithPm } from './run-with-pm.js';
+import type { CompileTsOpts } from './types.js';
 
 /**
  * Generates typescript typings, if requested
@@ -24,14 +24,14 @@ async function generateTypings({
   tsconfig,
 }: CompileTsOpts) {
   if (noDts) {
-    Logger.warn("noDts was set so skipping generating TypeScript typings");
+    Logger.warn('noDts was set so skipping generating TypeScript typings');
     return;
   }
 
   // if the tsconfig has incremental: true enabled, we have to disable it
   // or TSC might not generate typings for us at all.
   // we do this by overriding it if it is set.
-  const fileContents = await fs.readFile(tsconfig, "utf8");
+  const fileContents = await fs.readFile(tsconfig, 'utf8');
   const updatedTsconfig = JSON.parse(fileContents) as TsConfigJson;
   const indentSize = getIndentationSize(fileContents);
 
@@ -45,9 +45,9 @@ async function generateTypings({
     };
   }
 
-  if (format === "cjs" && parsedTsConfig.compilerOptions?.isolatedModules) {
+  if (format === 'cjs' && parsedTsConfig.compilerOptions?.isolatedModules) {
     Logger.warn(
-      "you cannot build typings for CommonJS when isolatedModules is set to true. we are setting this to false to allow typings to be written to disk properly",
+      'you cannot build typings for CommonJS when isolatedModules is set to true. we are setting this to false to allow typings to be written to disk properly',
     );
     updatedTsconfig.compilerOptions = {
       ...updatedTsconfig.compilerOptions,
@@ -57,7 +57,7 @@ async function generateTypings({
 
   if (parsedTsConfig.compilerOptions?.noEmit) {
     Logger.warn(
-      "noEmit was set to true, which would cause typing compilation to not work. we are setting this to false",
+      'noEmit was set to true, which would cause typing compilation to not work. we are setting this to false',
     );
     updatedTsconfig.compilerOptions = {
       ...updatedTsconfig.compilerOptions,
@@ -75,7 +75,7 @@ async function generateTypings({
 
   await runWithPm(cmd, {
     cwd,
-    stdio: "inherit",
+    stdio: 'inherit',
     verbose: true,
   });
   return;
@@ -99,7 +99,7 @@ const rewriteSpecifier = (
     ? resolvedRelative.replace(ext, outExtensionWithDot)
     : `${resolvedRelative}${outExtensionWithDot}`;
 
-  if (!newPath.startsWith(".") && !newPath.startsWith("/")) {
+  if (!newPath.startsWith('.') && !newPath.startsWith('/')) {
     newPath = `./${newPath}`;
   }
 
@@ -146,10 +146,10 @@ export async function compileCode(opts: CompileTsOpts) {
     const { code } = await transformFile(fp, {
       cwd,
       jsc: {
-        target: "esnext",
+        target: 'esnext',
         transform: {
           react: {
-            runtime: jsxRuntime ?? "automatic",
+            runtime: jsxRuntime ?? 'automatic',
           },
         },
       },
@@ -157,24 +157,24 @@ export async function compileCode(opts: CompileTsOpts) {
         outFileExtension: outExtension,
         resolveFully: true,
         strict: true,
-        type: format === "esm" ? "es6" : "commonjs",
+        type: format === 'esm' ? 'es6' : 'commonjs',
       },
       outputPath: outDir,
       sourceMaps: false,
     });
 
     await fs.ensureFile(outFilePath);
-    await fs.writeFile(outFilePath, code, "utf8");
+    await fs.writeFile(outFilePath, code, 'utf8');
   });
 
   await typescriptCompilationPromise;
   await Promise.all(swcCompilationPromises);
 
   const absoluteBuiltFiles = await glob(
-    path.join(outDir, "**", "*.d.ts"),
-    path.join(outDir, "**", "*.js"),
-    path.join(outDir, "**", "*.cjs"),
-    path.join(outDir, "**", "*.mjs"),
+    path.join(outDir, '**', '*.d.ts'),
+    path.join(outDir, '**', '*.js'),
+    path.join(outDir, '**', '*.cjs'),
+    path.join(outDir, '**', '*.mjs'),
   );
 
   // Matches ESM import/export statements and captures the module specifier
@@ -189,9 +189,9 @@ export async function compileCode(opts: CompileTsOpts) {
 
   const absBuiltFiles = await Promise.all(
     absoluteBuiltFiles.map(async (absFp) => {
-      if (absFp.endsWith(".d.ts")) return;
+      if (absFp.endsWith('.d.ts')) return;
 
-      let contents = await fs.readFile(absFp, "utf8");
+      let contents = await fs.readFile(absFp, 'utf8');
 
       // 1) Static imports / exports
       contents = contents.replaceAll(esmRegex, (full, _, imp1, __, imp2) => {
@@ -233,7 +233,7 @@ export async function compileCode(opts: CompileTsOpts) {
         return full.replace(strSpec, newPath);
       });
 
-      await fs.writeFile(absFp, contents, "utf8");
+      await fs.writeFile(absFp, contents, 'utf8');
       return absFp;
     }),
   );

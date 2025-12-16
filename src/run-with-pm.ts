@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 /* eslint-disable turbo/no-undeclared-env-vars */
 /* eslint-disable @typescript-eslint/no-namespace */
-import { detect } from "package-manager-detector";
+import { detect } from 'package-manager-detector';
 
-import type { ExecAsyncOpts } from "./exec-async.js";
-import { execAsync } from "./exec-async.js";
+import type { ExecAsyncOpts } from './exec-async.js';
+import { execAsync } from './exec-async.js';
 
 declare global {
   namespace NodeJS {
@@ -30,6 +30,6 @@ export async function runWithPm(cmd: string, execOpts: ExecAsyncOpts) {
   return execAsync(`${name} ${cmd}`, {
     ...execOpts,
     verbose:
-      (process.env.DUALITY_VERBOSE === "true" || execOpts.verbose) ?? false,
+      (process.env.DUALITY_VERBOSE === 'true' || execOpts.verbose) ?? false,
   });
 }
