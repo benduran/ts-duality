@@ -1,3 +1,11 @@
+## 1.0.0 (2025-12-16)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: swapped to biome because eslint honestly sucks these days (f7cb4ede4ba637f90f8355c18145c2b1eb0e16b3)
+
+---
+
 ## 0.6.0 (2025-12-03)
 
 ### 🔀 Miscellaneous 🔀
