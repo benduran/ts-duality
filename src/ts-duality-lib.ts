@@ -8,7 +8,7 @@ import { checkFileExists } from './check-file-exists.js';
 import { compileCode } from './compile-code.js';
 import { copyNonSourceFiles } from './copy-non-source-files.js';
 import { findTsconfigFile } from './find-tsconfig-file.js';
-import { formatWithPrettierIfPossible } from './format-with-prettier-if-possible.js';
+import { formatFile } from './format-with-prettier-if-possible.js';
 import { getIndentationSize } from './get-indentation.js';
 import type { PackageJsonWithPossibleConfig } from './inject-extra-exports.js';
 import { injectExtraExports } from './inject-extra-exports.js';
@@ -236,5 +236,5 @@ export async function buildTsPackage({
     JSON.stringify(injected, undefined, pjsonIndentSize),
     'utf8',
   );
-  await formatWithPrettierIfPossible(cwd, pjsonPath);
+  await formatFile(cwd, pjsonPath);
 }

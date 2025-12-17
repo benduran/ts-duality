@@ -4,7 +4,7 @@ import { transformFile } from '@swc/core';
 import fs from 'fs-extra';
 import type { TsConfigJson } from 'type-fest';
 
-import { formatWithPrettierIfPossible } from './format-with-prettier-if-possible.js';
+import { formatFile } from './format-with-prettier-if-possible.js';
 import { getIndentationSize } from './get-indentation.js';
 import { glob } from './glob-get.js';
 import { Logger } from './logger.js';
@@ -69,7 +69,7 @@ async function generateTypings({
     tsconfig,
     JSON.stringify(updatedTsconfig, undefined, indentSize),
   );
-  await formatWithPrettierIfPossible(cwd, tsconfig);
+  await formatFile(cwd, tsconfig);
 
   const cmd = `tsc --project ${path.relative(cwd, tsconfig)} --outDir ${path.relative(cwd, outDir)} --declaration --emitDeclarationOnly`;
 
