@@ -1,3 +1,17 @@
+## 1.1.0 (2025-12-17)
+
+### ✨ Features ✨
+
+- feat: format with biome if it's installed, falling back to prettier (02577f92b5ca5b61b7ad90849dfc0fac3d8a179d)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- chore: updated lockfile (8a43d50a9aa1aee7d570fe4c4fbcc1c015bd0ae0)
+
+---
+
 ## 1.0.0 (2025-12-16)
 
 ### 🔀 Miscellaneous 🔀
