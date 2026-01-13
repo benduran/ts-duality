@@ -27,6 +27,8 @@ import type {
   TSDualityLibOpts,
 } from './types.js';
 
+let watcher: Nullish<ReturnType<typeof chokidar.watch>>;
+
 export async function buildTsPackage(opts: TSDualityLibOpts) {
   const {
     clean,
@@ -260,6 +262,9 @@ function watchAndRebuild(
   inputFiles: string[],
   opts: TSDualityLibOpts,
 ) {
+  // do not double watch
+  if (watcher) return;
+
   const longestCommonParent = getCommonRootPath(
     inputFiles.map((fp) => path.join(cwd, fp)),
   );
@@ -270,7 +275,7 @@ function watchAndRebuild(
     ),
   );
 
-  const watcher = chokidar.watch(path.join(longestCommonParent, '.'), {
+  watcher = chokidar.watch(path.join(longestCommonParent, '.'), {
     awaitWriteFinish: {
       pollInterval: 100,
       stabilityThreshold: 100,
