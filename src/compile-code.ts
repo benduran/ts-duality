@@ -4,7 +4,7 @@ import { transformFile } from '@swc/core';
 import fs from 'fs-extra';
 import type { TsConfigJson } from 'type-fest';
 
-import { formatFile } from './format-with-prettier-if-possible.js';
+import { formatFile } from './format-file.js';
 import { getIndentationSize } from './get-indentation.js';
 import { glob } from './glob-get.js';
 import { Logger } from './logger.js';

@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import chalk from 'chalk';
+import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import type { PackageJson, TsConfigJson } from 'type-fest';
 
@@ -8,7 +9,8 @@ import { checkFileExists } from './check-file-exists.js';
 import { compileCode } from './compile-code.js';
 import { copyNonSourceFiles } from './copy-non-source-files.js';
 import { findTsconfigFile } from './find-tsconfig-file.js';
-import { formatFile } from './format-with-prettier-if-possible.js';
+import { formatFile } from './format-file.js';
+import { getCommonRootPath } from './get-common-root-path.js';
 import { getIndentationSize } from './get-indentation.js';
 import type { PackageJsonWithPossibleConfig } from './inject-extra-exports.js';
 import { injectExtraExports } from './inject-extra-exports.js';
@@ -19,24 +21,27 @@ import type {
   ExportsObject,
   JSXRuntime,
   ModuleType,
+  Nullish,
   SafePackageJsonExportObject,
   TSDualityLibOpts,
 } from './types.js';
 
-export async function buildTsPackage({
-  clean,
-  copyOtherFiles,
-  cwd: absOrRelativeCwd,
-  jsx,
-  noCjs,
-  noDts,
-  noEsm,
-  noGenerateExports,
-  noStripLeading,
-  outDir,
-  tsconfig: tsconfigOverride,
-  watch,
-}: TSDualityLibOpts) {
+export async function buildTsPackage(opts: TSDualityLibOpts) {
+  const {
+    clean,
+    copyOtherFiles,
+    cwd: absOrRelativeCwd,
+    jsx,
+    noCjs,
+    noDts,
+    noEsm,
+    noGenerateExports,
+    noStripLeading,
+    outDir,
+    tsconfig: tsconfigOverride,
+    watch,
+  } = opts;
+
   const cwd = path.isAbsolute(absOrRelativeCwd)
     ? absOrRelativeCwd
     : path.resolve(absOrRelativeCwd);
@@ -79,6 +84,8 @@ export async function buildTsPackage({
     );
   }
 
+  let absoluteBuiltFiles: string[] = [];
+
   // always freshly reset the exports and let the tool take over
   pjson.exports = {};
 
@@ -105,7 +112,7 @@ export async function buildTsPackage({
 
       const outExtension = format === 'cjs' ? 'cjs' : 'mjs';
 
-      const absoluteBuiltFiles = await compileCode({
+      absoluteBuiltFiles = await compileCode({
         cwd,
         entryPoints: tscFoundFiles,
         format,
@@ -237,4 +244,54 @@ export async function buildTsPackage({
     'utf8',
   );
   await formatFile(cwd, pjsonPath);
+
+  if (watch) {
+    void watchAndRebuild(absoluteBuiltFiles, opts);
+  }
+
+  return absoluteBuiltFiles;
+}
+
+/**
+ * conditionally called only when the watch: boolean is set to true
+ */
+function watchAndRebuild(absoluteBuiltFiles: string[], opts: TSDualityLibOpts) {
+  const longestCommonParent = getCommonRootPath(absoluteBuiltFiles);
+  const watcher = chokidar.watch(path.join(longestCommonParent, '.'), {
+    awaitWriteFinish: {
+      pollInterval: 100,
+      stabilityThreshold: 100,
+    },
+    followSymlinks: true,
+  });
+
+  let recompilerTimeout: Nullish<NodeJS.Timeout> = null;
+
+  const determineIfRecompile = () => {
+    if (recompilerTimeout) {
+      clearTimeout(recompilerTimeout);
+    }
+    recompilerTimeout = setTimeout(() => {
+      buildTsPackage(opts);
+    }, 100);
+  };
+
+  watcher.on('add', determineIfRecompile);
+  watcher.on('change', determineIfRecompile);
+  watcher.on('unlink', determineIfRecompile);
+
+  const attempGracefulShutdown = async () => {
+    try {
+      if (recompilerTimeout) {
+        clearTimeout(recompilerTimeout);
+      }
+      await watcher.close();
+    } catch {
+      /* no-op */
+    }
+    process.exit(0);
+  };
+
+  process.once('SIGKILL', attempGracefulShutdown);
+  process.once('SIGTERM', attempGracefulShutdown);
 }
