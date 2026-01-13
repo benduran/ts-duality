@@ -132,16 +132,6 @@
         "default": "./dist/esm/format-file.mjs"
       }
     },
-    "./format-with-prettier-if-possible": {
-      "require": {
-        "types": "./dist/cjs/format-with-prettier-if-possible.d.ts",
-        "default": "./dist/cjs/format-with-prettier-if-possible.cjs"
-      },
-      "import": {
-        "types": "./dist/esm/format-with-prettier-if-possible.d.ts",
-        "default": "./dist/esm/format-with-prettier-if-possible.mjs"
-      }
-    },
     "./generate-tsconfigs": {
       "require": {
         "types": "./dist/cjs/generate-tsconfigs.d.ts",

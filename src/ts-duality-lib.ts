@@ -1,3 +1,4 @@
+import os from 'node:os';
 import path from 'node:path';
 
 import chalk from 'chalk';
@@ -85,6 +86,7 @@ export async function buildTsPackage(opts: TSDualityLibOpts) {
   }
 
   let absoluteBuiltFiles: string[] = [];
+  let inputFiles: string[] = [];
 
   // always freshly reset the exports and let the tool take over
   pjson.exports = {};
@@ -106,15 +108,13 @@ export async function buildTsPackage(opts: TSDualityLibOpts) {
         }),
       ) as TsConfigJson;
 
-      const tscFoundFiles = Array.isArray(finalConfig.files)
-        ? finalConfig.files
-        : [];
+      inputFiles = Array.isArray(finalConfig.files) ? finalConfig.files : [];
 
       const outExtension = format === 'cjs' ? 'cjs' : 'mjs';
 
       absoluteBuiltFiles = await compileCode({
         cwd,
-        entryPoints: tscFoundFiles,
+        entryPoints: inputFiles,
         format,
         jsxRuntime: (jsx ?? 'automatic') as JSXRuntime,
         noDts,
@@ -127,7 +127,7 @@ export async function buildTsPackage(opts: TSDualityLibOpts) {
       });
 
       if (copyOtherFiles) {
-        await copyNonSourceFiles(cwd, tscFoundFiles, outDir);
+        await copyNonSourceFiles(cwd, inputFiles, outDir);
       }
 
       if (noGenerateExports) continue;
@@ -246,7 +246,7 @@ export async function buildTsPackage(opts: TSDualityLibOpts) {
   await formatFile(cwd, pjsonPath);
 
   if (watch) {
-    void watchAndRebuild(absoluteBuiltFiles, opts);
+    void watchAndRebuild(cwd, inputFiles, opts);
   }
 
   return absoluteBuiltFiles;
@@ -255,8 +255,21 @@ export async function buildTsPackage(opts: TSDualityLibOpts) {
 /**
  * conditionally called only when the watch: boolean is set to true
  */
-function watchAndRebuild(absoluteBuiltFiles: string[], opts: TSDualityLibOpts) {
-  const longestCommonParent = getCommonRootPath(absoluteBuiltFiles);
+function watchAndRebuild(
+  cwd: string,
+  inputFiles: string[],
+  opts: TSDualityLibOpts,
+) {
+  const longestCommonParent = getCommonRootPath(
+    inputFiles.map((fp) => path.join(cwd, fp)),
+  );
+  const relativeLongestCommonParent = path.relative(cwd, longestCommonParent);
+  console.info(
+    chalk.yellow(
+      `Starting watcher on files located in ${relativeLongestCommonParent}`,
+    ),
+  );
+
   const watcher = chokidar.watch(path.join(longestCommonParent, '.'), {
     awaitWriteFinish: {
       pollInterval: 100,
@@ -264,17 +277,30 @@ function watchAndRebuild(absoluteBuiltFiles: string[], opts: TSDualityLibOpts) {
     },
     followSymlinks: true,
     ignored: ['**/node_modules/**', '**/.git/**'],
+    ignoreInitial: true,
   });
 
   let recompilerTimeout: Nullish<NodeJS.Timeout> = null;
 
-  const determineIfRecompile = () => {
+  let changedFiles = new Set<string>();
+
+  const determineIfRecompile = (fp: string) => {
+    changedFiles.add(fp);
+
     if (recompilerTimeout) {
       clearTimeout(recompilerTimeout);
     }
     recompilerTimeout = setTimeout(() => {
+      console.info(
+        chalk.yellow(
+          `recompiling due to the following files changed:${os.EOL}${[...changedFiles].map((fp) => `  ${fp}`).join(os.EOL)}`,
+        ),
+      );
+
       buildTsPackage(opts);
-    }, 100);
+
+      changedFiles = new Set();
+    }, 250);
   };
 
   watcher.on('add', determineIfRecompile);
