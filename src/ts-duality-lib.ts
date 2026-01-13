@@ -318,7 +318,7 @@ function watchAndRebuild(
       if (recompilerTimeout) {
         clearTimeout(recompilerTimeout);
       }
-      await watcher.close();
+      await watcher?.close();
     } catch {
       /* no-op */
     }
