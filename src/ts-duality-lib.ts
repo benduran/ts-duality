@@ -263,6 +263,7 @@ function watchAndRebuild(absoluteBuiltFiles: string[], opts: TSDualityLibOpts) {
       stabilityThreshold: 100,
     },
     followSymlinks: true,
+    ignored: ['**/node_modules/**', '**/.git/**'],
   });
 
   let recompilerTimeout: Nullish<NodeJS.Timeout> = null;
