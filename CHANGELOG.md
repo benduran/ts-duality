@@ -1,3 +1,11 @@
+## 1.2.1 (2026-01-13)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed the recompiler to not thrash your system because of listening to the wrong folder (cb891b9b7a84ad3a92a3e827a64572b41f693b95)
+
+---
+
 ## 1.2.0 (2026-01-13)
 
 ### 🔀 Miscellaneous 🔀
