@@ -320,6 +320,6 @@ function watchAndRebuild(
     process.exit(0);
   };
 
-  process.once('SIGKILL', attempGracefulShutdown);
+  process.once('SIGINT', attempGracefulShutdown);
   process.once('SIGTERM', attempGracefulShutdown);
 }
