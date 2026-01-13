@@ -1,3 +1,11 @@
+## 1.2.3 (2026-01-13)
+
+### 🛠️ Fixes 🛠️
+
+- fix: swapped sigkill for sigint (ad7cabd990eaa97d391fd9f5898bbadbef00fc12)
+
+---
+
 ## 1.2.2 (2026-01-13)
 
 ### 🛠️ Fixes 🛠️
