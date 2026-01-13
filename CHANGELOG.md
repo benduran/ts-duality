@@ -1,3 +1,17 @@
+## 1.2.0 (2026-01-13)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: added node_modules and git folders to the ignored set, just in case (17d1e66e6d76213d0857513f4736dc9a8f820baa)
+
+
+
+### ✨ Features ✨
+
+- feat: added true recompilation watching to the entire source dir (5a18a39c163f138459a590dd9fc6d1e54c54179d)
+
+---
+
 ## 1.1.0 (2025-12-17)
 
 ### ✨ Features ✨
