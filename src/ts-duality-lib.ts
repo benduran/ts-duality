@@ -275,6 +275,7 @@ function watchAndRebuild(
       pollInterval: 100,
       stabilityThreshold: 100,
     },
+    cwd,
     followSymlinks: true,
     ignored: ['**/node_modules/**', '**/.git/**'],
     ignoreInitial: true,
