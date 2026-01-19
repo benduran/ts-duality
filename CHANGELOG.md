@@ -1,3 +1,11 @@
+## 1.3.0 (2026-01-19)
+
+### ✨ Features ✨
+
+- feat: added support for only writing index files to the package.json (8ba1a409e0d749703b5828d8f76f60f4829baa1d)
+
+---
+
 ## 1.2.5 (2026-01-13)
 
 ### 🔀 Miscellaneous 🔀
