@@ -49,6 +49,11 @@ export type TSDualityLibOpts = {
    */
   cwd: string;
   /**
+   * if true, will only write index files
+   * to your package.json exports
+   */
+  indexFilesOnly?: boolean;
+  /**
    * the type of JSX runtime to use when compiling your code
    */
   jsx: JSXRuntime;
