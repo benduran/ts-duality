@@ -34,6 +34,7 @@ export async function buildTsPackage(opts: TSDualityLibOpts) {
     clean,
     copyOtherFiles,
     cwd: absOrRelativeCwd,
+    indexFilesOnly = false,
     jsx,
     noCjs,
     noDts,
@@ -189,32 +190,37 @@ export async function buildTsPackage(opts: TSDualityLibOpts) {
           fp.replace(path.extname(fp), '.d.ts'),
         )}`;
 
-        // Ensure key object exists
-        const tempExports = exports[key] ?? {};
+        const isIndexFile = /index\.(cjs|mjs|js)$/.test(fpWithBasename);
 
-        let target: SafePackageJsonExportObject | undefined;
-        if (numFormats > 1) {
-          tempExports.require ??= {};
-          tempExports.import ??= {};
-          target = format === 'cjs' ? tempExports.require : tempExports.import;
-        } else {
-          target = tempExports;
-        }
+        if (!indexFilesOnly || isIndexFile) {
+          // Ensure key object exists
+          const tempExports = exports[key] ?? {};
 
-        // Assign type definitions if applicable
-        if (!noDts) {
-          const typingFileExists = await checkFileExists(
-            cwd,
-            possibleTypingFile,
-          );
-          if (typingFileExists) {
-            target.types = normalizePath(possibleTypingFile);
+          let target: SafePackageJsonExportObject | undefined;
+          if (numFormats > 1) {
+            tempExports.require ??= {};
+            tempExports.import ??= {};
+            target =
+              format === 'cjs' ? tempExports.require : tempExports.import;
+          } else {
+            target = tempExports;
           }
-        }
 
-        // Assign default JS entry
-        target.default = normalizePath(fpWithBasename);
-        exports[key] = tempExports;
+          // Assign type definitions if applicable
+          if (!noDts) {
+            const typingFileExists = await checkFileExists(
+              cwd,
+              possibleTypingFile,
+            );
+            if (typingFileExists) {
+              target.types = normalizePath(possibleTypingFile);
+            }
+          }
+
+          // Assign default JS entry
+          target.default = normalizePath(fpWithBasename);
+          exports[key] = tempExports;
+        }
       }
 
       pjson.exports = exports;

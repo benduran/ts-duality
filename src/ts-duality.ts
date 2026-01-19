@@ -36,6 +36,11 @@ to match where they were in your source folder`,
       description: 'the CWD to use when building',
       type: 'string',
     })
+    .option('indexFilesOnly', {
+      default: false,
+      description: `if true, will only write index files to your package.json exports`,
+      type: 'boolean',
+    })
     .option('jsx', {
       choices: ALLOWED_JSX_RUNTIMES,
       default: 'automatic',
