@@ -309,7 +309,9 @@ function watchAndRebuild(
         ),
       );
 
-      buildTsPackage(opts);
+      buildTsPackage(opts).catch((error) => {
+        console.error('recompilation failed due to', error);
+      });
 
       changedFiles = new Set();
     }, 250);
