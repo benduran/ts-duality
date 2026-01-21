@@ -1,3 +1,11 @@
+## 1.3.1 (2026-01-21)
+
+### 🛠️ Fixes 🛠️
+
+- fix: capture unhandledPromiseRejections on recompilation (c5f5376d323f870e2bc2da618cc0b6c2618dd09e)
+
+---
+
 ## 1.3.0 (2026-01-19)
 
 ### ✨ Features ✨
