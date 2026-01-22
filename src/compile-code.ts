@@ -82,7 +82,7 @@ async function generateTypings({
   return;
 }
 
-// Helper to rewrite a matched specifier using your resolver and rules
+// Helper to rewrite a matched specifier using a resolver and certain rules
 const rewriteSpecifier = (
   outDir: string,
   outExtensionWithDot: string,
@@ -203,7 +203,6 @@ export async function compileCode(opts: CompileTsOpts) {
 
       // 1) Static imports / exports
       contents = contents.replaceAll(esmRegex, (full, _, imp1, __, imp2) => {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const importPath = String(imp1 || imp2);
         const newPath = rewriteSpecifier(
           outDir,
@@ -211,6 +210,7 @@ export async function compileCode(opts: CompileTsOpts) {
           importPath,
           absFp,
         );
+        Logger.info('1: importPath:', importPath, 'newPath -', newPath);
         if (!newPath) return full;
         return full.replace(importPath, newPath);
       });
@@ -224,6 +224,7 @@ export async function compileCode(opts: CompileTsOpts) {
           strSpec,
           absFp,
         );
+        Logger.info('2: importPath', strSpec, 'newPath -', newPath);
         if (!newPath) return full;
         return full.replace(strSpec, newPath);
       });
@@ -237,6 +238,7 @@ export async function compileCode(opts: CompileTsOpts) {
           strSpec,
           absFp,
         );
+        Logger.info('3: importPath', strSpec, 'newPath -', newPath);
         if (!newPath) return full;
         return full.replace(strSpec, newPath);
       });
