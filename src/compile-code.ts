@@ -210,7 +210,6 @@ export async function compileCode(opts: CompileTsOpts) {
           importPath,
           absFp,
         );
-        Logger.info('1: importPath:', importPath, 'newPath -', newPath);
         if (!newPath) return full;
         return full.replace(importPath, newPath);
       });
@@ -224,7 +223,6 @@ export async function compileCode(opts: CompileTsOpts) {
           strSpec,
           absFp,
         );
-        Logger.info('2: importPath', strSpec, 'newPath -', newPath);
         if (!newPath) return full;
         return full.replace(strSpec, newPath);
       });
@@ -238,7 +236,6 @@ export async function compileCode(opts: CompileTsOpts) {
           strSpec,
           absFp,
         );
-        Logger.info('3: importPath', strSpec, 'newPath -', newPath);
         if (!newPath) return full;
         return full.replace(strSpec, newPath);
       });

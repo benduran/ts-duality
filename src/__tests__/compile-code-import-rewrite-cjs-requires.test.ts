@@ -18,67 +18,76 @@ async function ensureWriteFile(filepath: string, contents: string) {
   await fs.writeFile(filepath, contents, 'utf-8');
 }
 
-describe('compileCode import rewrites', () => {
+async function writeBasePackageFiles(tempDir: string) {
+  await Promise.all([
+    ensureWriteFile(
+      path.join(tempDir, 'package.json'),
+      JSON.stringify(
+        {
+          devDependencies: {
+            typescript: 'latest',
+          },
+          name: 'my-package',
+          version: '0.0.0',
+        },
+        null,
+        2,
+      ),
+    ),
+    ensureWriteFile(
+      path.join(tempDir, 'tsconfig.json'),
+      JSON.stringify(DUMMY_TSCONFIG, null, 2),
+    ),
+  ]);
+}
+
+describe('compileCode import rewrites - CJS requires', () => {
   const tempParent = path.join(import.meta.dirname, 'temp');
-  const tempDir = path.join(tempParent, 'compile-code-import-rewrites');
+  const tempDir = path.join(
+    tempParent,
+    'compile-code-import-rewrites-cjs-requires',
+  );
   let ogCwd = ';';
 
   beforeAll(() => {
     ogCwd = process.cwd();
   });
   beforeEach(async () => {
-    await fs.remove(tempParent);
+    await fs.remove(tempDir);
   });
   afterAll(() => {
     process.chdir(ogCwd);
   });
 
-  test('keeps dot-segment imports distinct (Button vs Button.styles)', async () => {
+  test('rewrites requires to .cjs for CJS output', async () => {
     const srcDir = path.join(tempDir, 'src');
     const outDir = path.join(tempDir, 'dist');
 
     await Promise.all([
-      ensureWriteFile(
-        path.join(tempDir, 'package.json'),
-        JSON.stringify(
-          {
-            devDependencies: {
-              typescript: 'latest',
-            },
-            name: 'my-package',
-            version: '0.0.0',
-          },
-          null,
-          2,
-        ),
-      ),
-      ensureWriteFile(
-        path.join(tempDir, 'tsconfig.json'),
-        JSON.stringify(DUMMY_TSCONFIG, null, 2),
-      ),
+      writeBasePackageFiles(tempDir),
       ensureWriteFile(
         path.join(srcDir, 'index.ts'),
         [
-          "import Button from './Button';",
-          "import './Button.styles';",
-          'export { Button };',
+          "const Button = require('./Button');",
+          "const styles = require('./Button.styles');",
+          "const util = require('./utils/util');",
+          'module.exports = { Button, styles, util };',
           '',
         ].join(os.EOL),
       ),
       ensureWriteFile(
         path.join(srcDir, 'Button.ts'),
-        [
-          'export default function Button() {',
-          "  return 'button';",
-          '}',
-          '',
-        ].join(os.EOL),
+        ['module.exports = function Button() { return "button"; };', ''].join(
+          os.EOL,
+        ),
       ),
       ensureWriteFile(
         path.join(srcDir, 'Button.styles.ts'),
-        ['export const buttonStyles = {', "  color: 'red',", '};', ''].join(
-          os.EOL,
-        ),
+        ['module.exports = { color: "red" };', ''].join(os.EOL),
+      ),
+      ensureWriteFile(
+        path.join(srcDir, 'utils', 'util.ts'),
+        ['module.exports = { util: true };', ''].join(os.EOL),
       ),
     ]);
     execSync('npm i', { cwd: tempDir, stdio: 'inherit' });
@@ -96,9 +105,9 @@ describe('compileCode import rewrites', () => {
       copyOtherFiles: false,
       cwd: tempDir,
       jsx: 'automatic',
-      noCjs: true,
+      noCjs: false,
       noDts: false,
-      noEsm: false,
+      noEsm: true,
       noGenerateExports: false,
       noStripLeading: false,
       tsconfig,
@@ -106,14 +115,13 @@ describe('compileCode import rewrites', () => {
       watch: false,
     });
 
-    expect(builtFiles.length).toBe(3);
-
     const builtIndex = await fs.readFile(
-      builtFiles.find((fp) => fp.endsWith('index.mjs')) ?? '',
+      builtFiles.find((fp) => fp.endsWith('index.cjs')) ?? '',
       'utf-8',
     );
 
-    expect(builtIndex).toMatch(/['"]\.\/Button\.mjs['"]/);
-    expect(builtIndex).toMatch(/['"]\.\/Button\.styles\.mjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/Button\.cjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/Button\.styles\.cjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/utils\/util\.cjs['"]/);
   });
 });

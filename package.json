@@ -29,7 +29,7 @@
     "lint": "biome check './src'",
     "lint:fix": "biome check './src' --write",
     "start": "bun ./build.ts",
-    "test": "bun test",
+    "test": "DUALITY_LOGLEVEL=silent bun test",
     "typecheck": "tsc"
   },
   "devDependencies": {
