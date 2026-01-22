@@ -1,3 +1,28 @@
+## 1.3.2-beta.1 (2026-01-22)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: moved tests up a dir so they don't get copied to the dist/ folder on build (78bf40abf543a29797ac1153412da7512c1dc8e9)
+- chore: removed errant console log (647f7088b5865998a9b6f73da5600a1b130ab755)
+- chore: exclude tests from the build (39ecffaedc972f7590f6d8d14493dd5f8cc8446d)
+
+---
+
+## 1.3.2-beta.0 (2026-01-22)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: more tests and added log silencing for the tests (396004649df44b8ff10f8a3f2904bbbc72f234c2)
+- chore: working on tests for ensuring similar imports aren't clobbered (cd39d2dc81ed68ea89346f12351d413cace68ab7)
+
+
+
+### 🛠️ Fixes 🛠️
+
+- fix: only mark a file as having an extension if the very last portion of its path is included in a known set of javascript-like file extensions (c0041356f563f01a193a2e686993cc267febbfeb)
+
+---
+
 ## 1.3.1 (2026-01-21)
 
 ### 🛠️ Fixes 🛠️

@@ -19,6 +19,25 @@ function ensureRelativePathStartsWithDotSlash(relpath: string) {
   return `./${relpath}`;
 }
 
+const KNOWN_EXTENSIONS = [
+  '.cjs',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.cts',
+  '.ts',
+  '.tsx',
+  '.mts',
+] as const;
+
+function importSpecifierHadJavascriptyExtension(importSpecifier: string) {
+  for (const ext of KNOWN_EXTENSIONS) {
+    if (importSpecifier.endsWith(ext)) return true;
+  }
+
+  return false;
+}
+
 /**
  * Create a resolver bound to the directory of a given file path.
  */
@@ -29,7 +48,8 @@ export function createResolver(absFilePath: string): ResolveImportCallback {
   const require = createRequire(pathToFileURL(absFilePath));
 
   return function resolve(importSpecifier, expectedFileExtensionWithDot) {
-    const hadExtension = /\.[a-zA-Z0-9]+$/.test(importSpecifier);
+    const hadExtension =
+      importSpecifierHadJavascriptyExtension(importSpecifier);
 
     const pathsToCheckForResolution = [
       ensureRelativePathStartsWithDotSlash(

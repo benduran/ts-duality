@@ -68,6 +68,7 @@ async function generateTypings({
   await fs.writeFile(
     tsconfig,
     JSON.stringify(updatedTsconfig, undefined, indentSize),
+    'utf-8',
   );
   await formatFile(cwd, tsconfig);
 
@@ -81,7 +82,7 @@ async function generateTypings({
   return;
 }
 
-// Helper to rewrite a matched specifier using your resolver and rules
+// Helper to rewrite a matched specifier using a resolver and certain rules
 const rewriteSpecifier = (
   outDir: string,
   outExtensionWithDot: string,
@@ -142,29 +143,35 @@ export async function compileCode(opts: CompileTsOpts) {
         .slice(noStripLeading ? 0 : 1)
         .filter(Boolean),
     );
-
-    const { code } = await transformFile(fp, {
-      cwd,
-      jsc: {
-        target: 'esnext',
-        transform: {
-          react: {
-            runtime: jsxRuntime ?? 'automatic',
+    try {
+      const { code } = await transformFile(fp, {
+        cwd,
+        jsc: {
+          target: 'esnext',
+          transform: {
+            react: {
+              runtime: jsxRuntime ?? 'automatic',
+            },
           },
         },
-      },
-      module: {
-        outFileExtension: outExtension,
-        resolveFully: true,
-        strict: true,
-        type: format === 'esm' ? 'es6' : 'commonjs',
-      },
-      outputPath: outDir,
-      sourceMaps: false,
-    });
+        module: {
+          outFileExtension: outExtension,
+          resolveFully: true,
+          strict: true,
+          type: format === 'esm' ? 'es6' : 'commonjs',
+        },
+        outputPath: outDir,
+        sourceMaps: false,
+      });
 
-    await fs.ensureFile(outFilePath);
-    await fs.writeFile(outFilePath, code, 'utf8');
+      await fs.ensureFile(outFilePath);
+      await fs.writeFile(outFilePath, code, 'utf8');
+    } catch (error) {
+      Logger.error(
+        `failed to compile ${trueRelPath} to ${path.relative(outDir, outFilePath)}`,
+      );
+      throw error;
+    }
   });
 
   await typescriptCompilationPromise;
@@ -195,7 +202,6 @@ export async function compileCode(opts: CompileTsOpts) {
 
       // 1) Static imports / exports
       contents = contents.replaceAll(esmRegex, (full, _, imp1, __, imp2) => {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const importPath = String(imp1 || imp2);
         const newPath = rewriteSpecifier(
           outDir,
