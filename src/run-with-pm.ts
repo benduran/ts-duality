@@ -27,7 +27,7 @@ export async function runWithPm(cmd: string, execOpts: ExecAsyncOpts) {
 
   const { name } = pmInfo;
 
-  return execAsync(`${name} ${cmd}`, {
+  return execAsync(`${name === 'npm' ? 'npx' : name} ${cmd}`, {
     ...execOpts,
     verbose:
       (process.env.DUALITY_VERBOSE === 'true' || execOpts.verbose) ?? false,
