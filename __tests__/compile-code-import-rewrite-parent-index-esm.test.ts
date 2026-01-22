@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'fs-extra';
-import { buildTsPackage } from '../ts-duality-lib.js';
+import { buildTsPackage } from '../src/ts-duality-lib.js';
 import { DUMMY_TSCONFIG } from './dummyTsconfig.js';
 
 async function ensureWriteFile(filepath: string, contents: string) {
@@ -41,11 +41,11 @@ async function writeBasePackageFiles(tempDir: string) {
   ]);
 }
 
-describe('compileCode import rewrites - bare/node ESM', () => {
+describe('compileCode import rewrites - parent/index ESM', () => {
   const tempParent = path.join(import.meta.dirname, 'temp');
   const tempDir = path.join(
     tempParent,
-    'compile-code-import-rewrites-bare-node-esm',
+    'compile-code-import-rewrites-parent-index-esm',
   );
   let ogCwd = ';';
 
@@ -59,7 +59,7 @@ describe('compileCode import rewrites - bare/node ESM', () => {
     process.chdir(ogCwd);
   });
 
-  test('does not rewrite bare specifiers or node: builtins for ESM output', async () => {
+  test('rewrites parent and directory index imports for ESM output', async () => {
     const srcDir = path.join(tempDir, 'src');
     const outDir = path.join(tempDir, 'dist');
 
@@ -68,21 +68,26 @@ describe('compileCode import rewrites - bare/node ESM', () => {
       ensureWriteFile(
         path.join(srcDir, 'index.ts'),
         [
-          "import react from 'react';",
-          "import fs from 'node:fs';",
-          "import { join } from 'node:path';",
-          "const lazy = import('node:url');",
-          'console.log(react, fs, join, lazy);',
+          "export * from './features';",
+          "export { sharedValue } from './shared';",
+          "export { byIndex } from './shared/index';",
           '',
         ].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'react.d.ts'),
+        path.join(srcDir, 'features', 'index.ts'),
         [
-          "declare module 'react' {",
-          '  const React: unknown;',
-          '  export default React;',
-          '}',
+          "import { sharedValue } from '../shared';",
+          "import { byIndex } from '../shared/index';",
+          'export const feature = `${sharedValue}-${byIndex}`;',
+          '',
+        ].join(os.EOL),
+      ),
+      ensureWriteFile(
+        path.join(srcDir, 'shared', 'index.ts'),
+        [
+          "export const sharedValue = 'shared';",
+          'export const byIndex = 7;',
           '',
         ].join(os.EOL),
       ),
@@ -116,10 +121,15 @@ describe('compileCode import rewrites - bare/node ESM', () => {
       builtFiles.find((fp) => fp.endsWith('index.mjs')) ?? '',
       'utf-8',
     );
+    const builtFeatures = await fs.readFile(
+      builtFiles.find((fp) =>
+        fp.endsWith(path.join('features', 'index.mjs')),
+      ) ?? '',
+      'utf-8',
+    );
 
-    expect(builtIndex).toMatch(/['"]react['"]/);
-    expect(builtIndex).toMatch(/['"]node:fs['"]/);
-    expect(builtIndex).toMatch(/['"]node:path['"]/);
-    expect(builtIndex).toMatch(/['"]node:url['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/features\/index\.mjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/shared\/index\.mjs['"]/);
+    expect(builtFeatures).toMatch(/['"]\.\.\/shared\/index\.mjs['"]/);
   });
 });

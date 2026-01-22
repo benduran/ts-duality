@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'fs-extra';
-import { buildTsPackage } from '../ts-duality-lib.js';
+import { buildTsPackage } from '../src/ts-duality-lib.js';
 import { DUMMY_TSCONFIG } from './dummyTsconfig.js';
 
 async function ensureWriteFile(filepath: string, contents: string) {
@@ -41,11 +41,11 @@ async function writeBasePackageFiles(tempDir: string) {
   ]);
 }
 
-describe('compileCode import rewrites - type-only', () => {
+describe('compileCode import rewrites - bare/node ESM', () => {
   const tempParent = path.join(import.meta.dirname, 'temp');
   const tempDir = path.join(
     tempParent,
-    'compile-code-import-rewrites-type-only',
+    'compile-code-import-rewrites-bare-node-esm',
   );
   let ogCwd = ';';
 
@@ -59,7 +59,7 @@ describe('compileCode import rewrites - type-only', () => {
     process.chdir(ogCwd);
   });
 
-  test('removes type-only imports and exports for ESM output', async () => {
+  test('does not rewrite bare specifiers or node: builtins for ESM output', async () => {
     const srcDir = path.join(tempDir, 'src');
     const outDir = path.join(tempDir, 'dist');
 
@@ -68,23 +68,23 @@ describe('compileCode import rewrites - type-only', () => {
       ensureWriteFile(
         path.join(srcDir, 'index.ts'),
         [
-          "import type { Config } from './types';",
-          "export type { Config } from './types';",
-          "import { runtime } from './runtime';",
-          'export { runtime };',
-          'export type AnotherConfig = Config & { pizza: boolean; };',
+          "import react from 'react';",
+          "import fs from 'node:fs';",
+          "import { join } from 'node:path';",
+          "const lazy = import('node:url');",
+          'console.log(react, fs, join, lazy);',
           '',
         ].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'types.ts'),
-        ['export interface Config {', '  enabled: boolean;', '}', ''].join(
-          os.EOL,
-        ),
-      ),
-      ensureWriteFile(
-        path.join(srcDir, 'runtime.ts'),
-        ["export const runtime = 'ok';", ''].join(os.EOL),
+        path.join(srcDir, 'react.d.ts'),
+        [
+          "declare module 'react' {",
+          '  const React: unknown;',
+          '  export default React;',
+          '}',
+          '',
+        ].join(os.EOL),
       ),
     ]);
     execSync('npm i', { cwd: tempDir, stdio: 'inherit' });
@@ -117,7 +117,9 @@ describe('compileCode import rewrites - type-only', () => {
       'utf-8',
     );
 
-    expect(builtIndex).toMatch(/['"]\.\/runtime\.mjs['"]/);
-    expect(builtIndex).not.toMatch(/['"]\.\/types\.mjs['"]/);
+    expect(builtIndex).toMatch(/['"]react['"]/);
+    expect(builtIndex).toMatch(/['"]node:fs['"]/);
+    expect(builtIndex).toMatch(/['"]node:path['"]/);
+    expect(builtIndex).toMatch(/['"]node:url['"]/);
   });
 });

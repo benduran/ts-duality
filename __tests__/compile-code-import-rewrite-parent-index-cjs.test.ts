@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'fs-extra';
-import { buildTsPackage } from '../ts-duality-lib.js';
+import { buildTsPackage } from '../src/ts-duality-lib.js';
 import { DUMMY_TSCONFIG } from './dummyTsconfig.js';
 
 async function ensureWriteFile(filepath: string, contents: string) {
@@ -88,9 +88,7 @@ describe('compileCode import rewrites - parent/index CJS', () => {
       ),
       ensureWriteFile(
         path.join(srcDir, 'shared', 'index.ts'),
-        ['module.exports = { value: "shared", byIndex: 7 };', ''].join(
-          os.EOL,
-        ),
+        ['module.exports = { value: "shared", byIndex: 7 };', ''].join(os.EOL),
       ),
     ]);
     execSync('npm i', { cwd: tempDir, stdio: 'inherit' });
@@ -123,8 +121,9 @@ describe('compileCode import rewrites - parent/index CJS', () => {
       'utf-8',
     );
     const builtFeatures = await fs.readFile(
-      builtFiles.find((fp) => fp.endsWith(path.join('features', 'index.cjs'))) ??
-        '',
+      builtFiles.find((fp) =>
+        fp.endsWith(path.join('features', 'index.cjs')),
+      ) ?? '',
       'utf-8',
     );
 

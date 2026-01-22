@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'fs-extra';
-import { buildTsPackage } from '../ts-duality-lib.js';
+import { buildTsPackage } from '../src/ts-duality-lib.js';
 import { DUMMY_TSCONFIG } from './dummyTsconfig.js';
 
 async function ensureWriteFile(filepath: string, contents: string) {

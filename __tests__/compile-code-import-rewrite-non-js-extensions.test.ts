@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'fs-extra';
-import { buildTsPackage } from '../ts-duality-lib.js';
+import { buildTsPackage } from '../src/ts-duality-lib.js';
 import { DUMMY_TSCONFIG } from './dummyTsconfig.js';
 
 async function ensureWriteFile(filepath: string, contents: string) {
@@ -41,11 +41,11 @@ async function writeBasePackageFiles(tempDir: string) {
   ]);
 }
 
-describe('compileCode import rewrites - nested exports', () => {
+describe('compileCode import rewrites - non-JS extensions', () => {
   const tempParent = path.join(import.meta.dirname, 'temp');
   const tempDir = path.join(
     tempParent,
-    'compile-code-import-rewrites-nested-exports',
+    'compile-code-import-rewrites-non-js-extensions',
   );
   let ogCwd = ';';
 
@@ -59,7 +59,7 @@ describe('compileCode import rewrites - nested exports', () => {
     process.chdir(ogCwd);
   });
 
-  test('rewrites nested and export-from imports for ESM output', async () => {
+  test('preserves non-JS extension imports in ESM output', async () => {
     const srcDir = path.join(tempDir, 'src');
     const outDir = path.join(tempDir, 'dist');
 
@@ -68,34 +68,29 @@ describe('compileCode import rewrites - nested exports', () => {
       ensureWriteFile(
         path.join(srcDir, 'index.ts'),
         [
-          "import { util } from './utils/util';",
-          "export { Component } from './components/Component';",
-          "export * from './components/Component.styles';",
-          'async function loadLazy() {',
-          "  return import('./lazy/Lazy');",
-          '}',
-          'void loadLazy();',
-          'console.log(util);',
+          "import './styles/site.css';",
+          "import data from './data/config.json';",
+          'export const configName = data.name;',
           '',
         ].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'utils', 'util.ts'),
-        ["export const util = 'util';", ''].join(os.EOL),
+        path.join(srcDir, 'global.d.ts'),
+        [
+          "declare module '*.css' {",
+          '  const content: string;',
+          '  export default content;',
+          '}',
+          '',
+        ].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'components', 'Component.ts'),
-        ["export const Component = 'component';", ''].join(os.EOL),
+        path.join(srcDir, 'styles', 'site.css'),
+        ['.root { color: red; }', ''].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'components', 'Component.styles.ts'),
-        ['export const componentStyles = { color: "blue" };', ''].join(
-          os.EOL,
-        ),
-      ),
-      ensureWriteFile(
-        path.join(srcDir, 'lazy', 'Lazy.ts'),
-        ['export const Lazy = 123;', ''].join(os.EOL),
+        path.join(srcDir, 'data', 'config.json'),
+        JSON.stringify({ name: 'demo' }, null, 2),
       ),
     ]);
     execSync('npm i', { cwd: tempDir, stdio: 'inherit' });
@@ -128,11 +123,7 @@ describe('compileCode import rewrites - nested exports', () => {
       'utf-8',
     );
 
-    expect(builtIndex).toMatch(/['"]\.\/utils\/util\.mjs['"]/);
-    expect(builtIndex).toMatch(/['"]\.\/components\/Component\.mjs['"]/);
-    expect(builtIndex).toMatch(
-      /['"]\.\/components\/Component\.styles\.mjs['"]/,
-    );
-    expect(builtIndex).toMatch(/['"]\.\/lazy\/Lazy\.mjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/styles\/site\.css['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/data\/config\.json['"]/);
   });
 });

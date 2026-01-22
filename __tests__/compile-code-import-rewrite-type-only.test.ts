@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'fs-extra';
-import { buildTsPackage } from '../ts-duality-lib.js';
+import { buildTsPackage } from '../src/ts-duality-lib.js';
 import { DUMMY_TSCONFIG } from './dummyTsconfig.js';
 
 async function ensureWriteFile(filepath: string, contents: string) {
@@ -18,44 +18,34 @@ async function ensureWriteFile(filepath: string, contents: string) {
   await fs.writeFile(filepath, contents, 'utf-8');
 }
 
-async function writePackageJson(tempDir: string) {
-  await ensureWriteFile(
-    path.join(tempDir, 'package.json'),
-    JSON.stringify(
-      {
-        devDependencies: {
-          typescript: 'latest',
+async function writeBasePackageFiles(tempDir: string) {
+  await Promise.all([
+    ensureWriteFile(
+      path.join(tempDir, 'package.json'),
+      JSON.stringify(
+        {
+          devDependencies: {
+            typescript: 'latest',
+          },
+          name: 'my-package',
+          version: '0.0.0',
         },
-        name: 'my-package',
-        version: '0.0.0',
-      },
-      null,
-      2,
+        null,
+        2,
+      ),
     ),
-  );
+    ensureWriteFile(
+      path.join(tempDir, 'tsconfig.json'),
+      JSON.stringify(DUMMY_TSCONFIG, null, 2),
+    ),
+  ]);
 }
 
-async function writeTsconfig(tempDir: string, tsconfig: typeof DUMMY_TSCONFIG) {
-  await ensureWriteFile(
-    path.join(tempDir, 'tsconfig.json'),
-    JSON.stringify(tsconfig, null, 2),
-  );
-}
-
-const DUMMY_TSCONFIG_WITH_JS = {
-  ...DUMMY_TSCONFIG,
-  compilerOptions: {
-    ...DUMMY_TSCONFIG.compilerOptions,
-    allowJs: true,
-  },
-  include: ['./**/*.ts', './**/*.tsx', './**/*.js'],
-};
-
-describe('compileCode import rewrites - explicit .js CJS', () => {
+describe('compileCode import rewrites - type-only', () => {
   const tempParent = path.join(import.meta.dirname, 'temp');
   const tempDir = path.join(
     tempParent,
-    'compile-code-import-rewrites-explicit-js-cjs',
+    'compile-code-import-rewrites-type-only',
   );
   let ogCwd = ';';
 
@@ -69,29 +59,32 @@ describe('compileCode import rewrites - explicit .js CJS', () => {
     process.chdir(ogCwd);
   });
 
-  test('rewrites explicit .js specifiers to .cjs for CJS output', async () => {
+  test('removes type-only imports and exports for ESM output', async () => {
     const srcDir = path.join(tempDir, 'src');
     const outDir = path.join(tempDir, 'dist');
 
     await Promise.all([
-      writePackageJson(tempDir),
-      writeTsconfig(tempDir, DUMMY_TSCONFIG_WITH_JS),
+      writeBasePackageFiles(tempDir),
       ensureWriteFile(
         path.join(srcDir, 'index.ts'),
         [
-          "const value = require('./runtime.js');",
-          "const helper = require('./helpers');",
-          'module.exports = { value, helper };',
+          "import type { Config } from './types';",
+          "export type { Config } from './types';",
+          "import { runtime } from './runtime';",
+          'export { runtime };',
+          'export type AnotherConfig = Config & { pizza: boolean; };',
           '',
         ].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'runtime.js'),
-        ['module.exports = "v";', ''].join(os.EOL),
+        path.join(srcDir, 'types.ts'),
+        ['export interface Config {', '  enabled: boolean;', '}', ''].join(
+          os.EOL,
+        ),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'helpers.ts'),
-        ["module.exports = 'h';", ''].join(os.EOL),
+        path.join(srcDir, 'runtime.ts'),
+        ["export const runtime = 'ok';", ''].join(os.EOL),
       ),
     ]);
     execSync('npm i', { cwd: tempDir, stdio: 'inherit' });
@@ -109,9 +102,9 @@ describe('compileCode import rewrites - explicit .js CJS', () => {
       copyOtherFiles: false,
       cwd: tempDir,
       jsx: 'automatic',
-      noCjs: false,
+      noCjs: true,
       noDts: false,
-      noEsm: true,
+      noEsm: false,
       noGenerateExports: false,
       noStripLeading: false,
       tsconfig,
@@ -120,11 +113,11 @@ describe('compileCode import rewrites - explicit .js CJS', () => {
     });
 
     const builtIndex = await fs.readFile(
-      builtFiles.find((fp) => fp.endsWith('index.cjs')) ?? '',
+      builtFiles.find((fp) => fp.endsWith('index.mjs')) ?? '',
       'utf-8',
     );
 
-    expect(builtIndex).toMatch(/['"]\.\/runtime\.cjs['"]/);
-    expect(builtIndex).toMatch(/['"]\.\/helpers\.cjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/runtime\.mjs['"]/);
+    expect(builtIndex).not.toMatch(/['"]\.\/types\.mjs['"]/);
   });
 });

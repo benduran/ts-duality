@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'fs-extra';
-import { buildTsPackage } from '../ts-duality-lib.js';
+import { buildTsPackage } from '../src/ts-duality-lib.js';
 import { DUMMY_TSCONFIG } from './dummyTsconfig.js';
 
 async function ensureWriteFile(filepath: string, contents: string) {
@@ -18,44 +18,34 @@ async function ensureWriteFile(filepath: string, contents: string) {
   await fs.writeFile(filepath, contents, 'utf-8');
 }
 
-async function writePackageJson(tempDir: string) {
-  await ensureWriteFile(
-    path.join(tempDir, 'package.json'),
-    JSON.stringify(
-      {
-        devDependencies: {
-          typescript: 'latest',
+async function writeBasePackageFiles(tempDir: string) {
+  await Promise.all([
+    ensureWriteFile(
+      path.join(tempDir, 'package.json'),
+      JSON.stringify(
+        {
+          devDependencies: {
+            typescript: 'latest',
+          },
+          name: 'my-package',
+          version: '0.0.0',
         },
-        name: 'my-package',
-        version: '0.0.0',
-      },
-      null,
-      2,
+        null,
+        2,
+      ),
     ),
-  );
+    ensureWriteFile(
+      path.join(tempDir, 'tsconfig.json'),
+      JSON.stringify(DUMMY_TSCONFIG, null, 2),
+    ),
+  ]);
 }
 
-async function writeTsconfig(tempDir: string, tsconfig: typeof DUMMY_TSCONFIG) {
-  await ensureWriteFile(
-    path.join(tempDir, 'tsconfig.json'),
-    JSON.stringify(tsconfig, null, 2),
-  );
-}
-
-const DUMMY_TSCONFIG_WITH_JS = {
-  ...DUMMY_TSCONFIG,
-  compilerOptions: {
-    ...DUMMY_TSCONFIG.compilerOptions,
-    allowJs: true,
-  },
-  include: ['./**/*.ts', './**/*.tsx', './**/*.js'],
-};
-
-describe('compileCode import rewrites - explicit .js ESM', () => {
+describe('compileCode import rewrites - dot segment distinct', () => {
   const tempParent = path.join(import.meta.dirname, 'temp');
   const tempDir = path.join(
     tempParent,
-    'compile-code-import-rewrites-explicit-js-esm',
+    'compile-code-import-rewrites-dot-segment',
   );
   let ogCwd = ';';
 
@@ -69,39 +59,35 @@ describe('compileCode import rewrites - explicit .js ESM', () => {
     process.chdir(ogCwd);
   });
 
-  test('rewrites explicit .js specifiers to .mjs for ESM output', async () => {
+  test('keeps dot-segment imports distinct (Button vs Button.styles)', async () => {
     const srcDir = path.join(tempDir, 'src');
     const outDir = path.join(tempDir, 'dist');
 
     await Promise.all([
-      writePackageJson(tempDir),
-      writeTsconfig(tempDir, DUMMY_TSCONFIG_WITH_JS),
+      writeBasePackageFiles(tempDir),
       ensureWriteFile(
         path.join(srcDir, 'index.ts'),
         [
-          "import { value } from './runtime.js';",
-          "import { helper } from './helpers';",
-          'export { value, helper };',
+          "import Button from './Button';",
+          "import './Button.styles';",
+          'export { Button };',
           '',
         ].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'runtime.js'),
-        ['export const value = "v";', ''].join(os.EOL),
-      ),
-      ensureWriteFile(
-        path.join(srcDir, 'runtime.d.ts'),
+        path.join(srcDir, 'Button.ts'),
         [
-          'export {};',
-          "declare module './runtime.js' {",
-          '  export const value: string;',
+          'export default function Button() {',
+          "  return 'button';",
           '}',
           '',
         ].join(os.EOL),
       ),
       ensureWriteFile(
-        path.join(srcDir, 'helpers.ts'),
-        ["export const helper = 'h';", ''].join(os.EOL),
+        path.join(srcDir, 'Button.styles.ts'),
+        ['export const buttonStyles = {', "  color: 'red',", '};', ''].join(
+          os.EOL,
+        ),
       ),
     ]);
     execSync('npm i', { cwd: tempDir, stdio: 'inherit' });
@@ -129,12 +115,14 @@ describe('compileCode import rewrites - explicit .js ESM', () => {
       watch: false,
     });
 
+    expect(builtFiles.length).toBe(3);
+
     const builtIndex = await fs.readFile(
       builtFiles.find((fp) => fp.endsWith('index.mjs')) ?? '',
       'utf-8',
     );
 
-    expect(builtIndex).toMatch(/['"]\.\/runtime\.mjs['"]/);
-    expect(builtIndex).toMatch(/['"]\.\/helpers\.mjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/Button\.mjs['"]/);
+    expect(builtIndex).toMatch(/['"]\.\/Button\.styles\.mjs['"]/);
   });
 });
