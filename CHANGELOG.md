@@ -1,3 +1,18 @@
+## 1.3.2-beta.0 (2026-01-22)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: more tests and added log silencing for the tests (396004649df44b8ff10f8a3f2904bbbc72f234c2)
+- chore: working on tests for ensuring similar imports aren't clobbered (cd39d2dc81ed68ea89346f12351d413cace68ab7)
+
+
+
+### 🛠️ Fixes 🛠️
+
+- fix: only mark a file as having an extension if the very last portion of its path is included in a known set of javascript-like file extensions (c0041356f563f01a193a2e686993cc267febbfeb)
+
+---
+
 ## 1.3.1 (2026-01-21)
 
 ### 🛠️ Fixes 🛠️
