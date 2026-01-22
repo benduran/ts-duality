@@ -144,7 +144,6 @@ export async function compileCode(opts: CompileTsOpts) {
         .filter(Boolean),
     );
     try {
-      Logger.info('transforming', fp, 'in', cwd);
       const { code } = await transformFile(fp, {
         cwd,
         jsc: {
