@@ -1,3 +1,13 @@
+## 1.3.2-beta.1 (2026-01-22)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: moved tests up a dir so they don't get copied to the dist/ folder on build (78bf40abf543a29797ac1153412da7512c1dc8e9)
+- chore: removed errant console log (647f7088b5865998a9b6f73da5600a1b130ab755)
+- chore: exclude tests from the build (39ecffaedc972f7590f6d8d14493dd5f8cc8446d)
+
+---
+
 ## 1.3.2-beta.0 (2026-01-22)
 
 ### 🔀 Miscellaneous 🔀
