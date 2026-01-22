@@ -1,3 +1,11 @@
+## 1.3.2 (2026-01-22)
+
+### 🔀 Miscellaneous 🔀
+
+- Version bump forced for all
+
+---
+
 ## 1.3.2-beta.1 (2026-01-22)
 
 ### 🔀 Miscellaneous 🔀
